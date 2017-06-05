@@ -1,5 +1,7 @@
 # KSF-Creator-JS
 
+KSF-Creator-JS is based on Electron Framework.
+
 A basic Electron application needs just these files:
 
 - `package.json` - Points to the app's main file and lists its details and dependencies.

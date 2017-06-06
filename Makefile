@@ -6,6 +6,7 @@ all : $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	$(JC) -out $@ $^ 
+	electron .
 
 clean :
-	rm *.o $(TARGET)
+	rm $(TARGET)

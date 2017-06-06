@@ -27,6 +27,30 @@ function createWindow () {
     mainWindow.on('closed', function () {
         mainWindow = null
     })
+
+    const {dialog} = require('electron');
+    let file : string = dialog.showOpenDialog({properties: ['openFile']});
+    file = file.length ? file[0] : '';
+    console.log(file);
+
+    // console.log(fs);
+    //
+    let ksfinfo = new KSFInfo("mytitle");
+    ksfinfo.showData();
+    
+    if (file !== '') {
+        ksfinfo.loadKSF(file, () => {
+            ksfinfo.showData();
+        });
+        // console.log(ksfinfo);
+        // console.log(ksfinfo.title);
+    }
+
+
+
+
+
+
 }
 
 // This method will be called when Electron has finished

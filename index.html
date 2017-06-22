@@ -2,14 +2,80 @@
 <html>
   <head>
     <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+
     <title>Hello World!</title>
+    <script>
+window.PIXI = require( 'phaser/build/custom/pixi' )
+window.p2 = require( 'phaser/build/custom/p2' )
+window.Phaser = require( 'phaser/build/custom/phaser-split' )
+
+
+
+        window.$ = window.jQuery = require('jquery');
+
+
+window.onload = function() {
+
+    //  Note that this html file is set to pull down Phaser 2.5.0 from the JS Delivr CDN.
+    //  Although it will work fine with this tutorial, it's almost certainly not the most current version.
+    //  Be sure to replace it with an updated version before you start experimenting with adding your own code.
+
+    var game = new Phaser.Game(800, 600, Phaser.AUTO, 'ksf-view', { preload: preload, create: create });
+
+    function preload () {
+
+        game.load.image('logo', 'phaser.png');
+
+    }
+
+    function create () {
+
+        var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
+        logo.anchor.setTo(0.5, 0.5);
+
+    }
+
+};
+
+
+
+    </script>
   </head>
   <body>
     <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+
+
+
+    <div class="upper">
+
+        <input type="button" id="btn" value="Get Data" />
+
+    </div>
+    <div class="lower">
+
+        <div id="ksf-view"></div>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>        
+
+    </div>
+
+
+
+
+
+
+
+    
   </body>
 
   <script>

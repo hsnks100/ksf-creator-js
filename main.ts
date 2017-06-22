@@ -26,31 +26,7 @@ function createWindow () {
 
     mainWindow.on('closed', function () {
         mainWindow = null
-    })
-
-    const {dialog} = require('electron');
-    let file : string = dialog.showOpenDialog({properties: ['openFile']});
-    file = file.length ? file[0] : '';
-    console.log(file);
-
-    // console.log(fs);
-    //
-    let ksfinfo = new KSFInfo("mytitle");
-    ksfinfo.showData();
-    
-    if (file !== '') {
-        ksfinfo.loadKSF(file, () => {
-            ksfinfo.showData();
-        });
-        // console.log(ksfinfo);
-        // console.log(ksfinfo.title);
-    }
-
-
-
-
-
-
+    }) 
 }
 
 // This method will be called when Electron has finished
@@ -77,3 +53,30 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+
+
+
+exports.loadKSF = function() { 
+    const {dialog} = require('electron');
+    var file = dialog.showOpenDialog({properties: ['openFile']});
+    file = file.length ? file[0] : '';
+    console.log(file);
+
+    // console.log(fs);
+    //
+    var ksfinfo = new KSFInfo("mytitle");
+    ksfinfo.showData();
+
+
+    if (file !== '') {
+        ksfinfo.loadKSF(file, () => { 
+            ksfinfo.showData();
+        });
+
+        // console.log(ksfinfo);
+        // console.log(ksfinfo.title);
+    } 
+}
+
+

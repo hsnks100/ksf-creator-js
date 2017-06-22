@@ -1,7 +1,16 @@
+/*
+ *
+ *
+ * 전체의 큰 구조는 KSFInfo 
+ */
+
 
 class StepData {
-    unitStep : Array<string>;
+    unitStep : string;
     unitCOP : Array<string>; 
+    constructor(){
+        this.unitCOP = [];
+    }
 }
 class KSFInfo {
     public title : string;
@@ -20,12 +29,13 @@ class KSFInfo {
     bunki1 : number;
     bunki2 : number;
     startTime2 : number;
-    startTime3 : number;
+    startTime3 : number; 
 
+    steps : Array<StepData>;
 
-    steps : StepData;
-
-    constructor(name: string) { this.title = name; }
+    constructor(name: string) { this.title = name; 
+        this.steps = []; 
+    }
 
     private getFromRegExp(data, regex) {
         var res = regex.exec(data);
@@ -36,9 +46,9 @@ class KSFInfo {
     }
 
     public showData() {
-        console.log(this.title);
         console.log(this);
     }
+
     public loadKSF(path:string, finish:() => void){
         this.title = "temptitle";
         var fs = require('fs');
@@ -58,16 +68,29 @@ class KSFInfo {
             this.discFile = this.getFromRegExp(data, /^#DISCFILE:(.*);/m);
             this.difficulty = this.getFromRegExp(data, /^#DIFFICULTY:(.*);/m);
 
+
+            // expression = TEXT("^#STEP:([.\\n]+)");
+            var stringStep = this.getFromRegExp(data, /#STEP:([\S\s]+)/);
+            var eachSteps = stringStep.split('\n');
+            for(var i=0; i<eachSteps.length; i++){
+                console.log(eachSteps[i]);
+                var firstChar = eachSteps[i][0];
+                if(firstChar == '|'){
+                    var lastIndex = this.steps.length - 1;
+                    console.log("lastIndex = ", lastIndex);
+                    this.steps[lastIndex].unitCOP.push(eachSteps[i]);
+                }
+                else if(firstChar == '2'){
+                }
+                else{
+                    var stepdata = new StepData();
+                    stepdata.unitStep = eachSteps[i];
+                    stepdata.unitCOP = [];
+
+                    this.steps.push(stepdata); 
+                }
+            } 
             finish();
-
-
-            // let regexResult = /^#STEP:((.|\n)+)/m.exec(data);
-            // console.log(regexResult);
-            // let strSteps = regexResult[1]; 
         });
-        // let temp : Array<string>;
-        // this.steps.unitStep.push("qwewe");
-        // this.steps.unitStep.push("qwewe2"); 
-    }
-
+    } 
 }

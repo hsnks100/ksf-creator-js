@@ -1,0 +1,14 @@
+
+
+.upper {
+    height: 200px;
+    background-color: pink;  
+}
+
+.lower {
+    bottom: 0;
+    height:300px;
+    background-color: blue;    
+    overflow:scroll;
+}
+

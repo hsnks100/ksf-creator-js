@@ -1,11 +1,18 @@
+/*
+ *
+ *
+ * 전체의 큰 구조는 KSFInfo
+ */
 var StepData = (function () {
     function StepData() {
+        this.unitCOP = [];
     }
     return StepData;
 }());
 var KSFInfo = (function () {
     function KSFInfo(name) {
         this.title = name;
+        this.steps = [];
     }
     KSFInfo.prototype.getFromRegExp = function (data, regex) {
         var res = regex.exec(data);
@@ -15,7 +22,6 @@ var KSFInfo = (function () {
         return null;
     };
     KSFInfo.prototype.showData = function () {
-        console.log(this.title);
         console.log(this);
     };
     KSFInfo.prototype.loadKSF = function (path, finish) {
@@ -35,14 +41,28 @@ var KSFInfo = (function () {
             _this.songFile = _this.getFromRegExp(data, /^#SONGFILE:(.*);/m);
             _this.discFile = _this.getFromRegExp(data, /^#DISCFILE:(.*);/m);
             _this.difficulty = _this.getFromRegExp(data, /^#DIFFICULTY:(.*);/m);
+            // expression = TEXT("^#STEP:([.\\n]+)");
+            var stringStep = _this.getFromRegExp(data, /#STEP:([\S\s]+)/);
+            var eachSteps = stringStep.split('\n');
+            for (var i = 0; i < eachSteps.length; i++) {
+                console.log(eachSteps[i]);
+                var firstChar = eachSteps[i][0];
+                if (firstChar == '|') {
+                    var lastIndex = _this.steps.length - 1;
+                    console.log("lastIndex = ", lastIndex);
+                    _this.steps[lastIndex].unitCOP.push(eachSteps[i]);
+                }
+                else if (firstChar == '2') {
+                }
+                else {
+                    var stepdata = new StepData();
+                    stepdata.unitStep = eachSteps[i];
+                    stepdata.unitCOP = [];
+                    _this.steps.push(stepdata);
+                }
+            }
             finish();
-            // let regexResult = /^#STEP:((.|\n)+)/m.exec(data);
-            // console.log(regexResult);
-            // let strSteps = regexResult[1]; 
         });
-        // let temp : Array<string>;
-        // this.steps.unitStep.push("qwewe");
-        // this.steps.unitStep.push("qwewe2"); 
     };
     return KSFInfo;
 }());
@@ -68,21 +88,6 @@ function createWindow() {
     mainWindow.on('closed', function () {
         mainWindow = null;
     });
-    var dialog = require('electron').dialog;
-    var file = dialog.showOpenDialog({ properties: ['openFile'] });
-    file = file.length ? file[0] : '';
-    console.log(file);
-    // console.log(fs);
-    //
-    var ksfinfo = new KSFInfo("mytitle");
-    ksfinfo.showData();
-    if (file !== '') {
-        ksfinfo.loadKSF(file, function () {
-            ksfinfo.showData();
-        });
-        // console.log(ksfinfo);
-        // console.log(ksfinfo.title);
-    }
 }
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -105,3 +110,20 @@ app.on('activate', function () {
 });
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+exports.loadKSF = function () {
+    var dialog = require('electron').dialog;
+    var file = dialog.showOpenDialog({ properties: ['openFile'] });
+    file = file.length ? file[0] : '';
+    console.log(file);
+    // console.log(fs);
+    //
+    var ksfinfo = new KSFInfo("mytitle");
+    ksfinfo.showData();
+    if (file !== '') {
+        ksfinfo.loadKSF(file, function () {
+            ksfinfo.showData();
+        });
+        // console.log(ksfinfo);
+        // console.log(ksfinfo.title);
+    }
+};

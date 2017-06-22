@@ -19,6 +19,11 @@
   "devDependencies": {
     "electron": "~1.6.2",
     "electron-inspector": "^0.1.4",
+    "electron-packager": "^8.7.1",
     "electron-rebuild": "^1.2.1"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "phaser": "^2.6.2"
   }
 }

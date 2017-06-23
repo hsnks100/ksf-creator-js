@@ -66,7 +66,7 @@ exports.loadKSF = function() {
     // console.log(fs);
     //
     var ksfinfo = new KSFInfo("mytitle");
-    ksfinfo.showData();
+    // ksfinfo.showData();
 
 
     if (file !== '') {

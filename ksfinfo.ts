@@ -69,25 +69,41 @@ class KSFInfo {
             this.difficulty = this.getFromRegExp(data, /^#DIFFICULTY:(.*);/m);
 
 
+            console.log("first steps length = ", this.steps.length);
             // expression = TEXT("^#STEP:([.\\n]+)");
             var stringStep = this.getFromRegExp(data, /#STEP:([\S\s]+)/);
+            stringStep = stringStep.trim();
             var eachSteps = stringStep.split('\n');
+            let context : number = 0;
             for(var i=0; i<eachSteps.length; i++){
                 console.log(eachSteps[i]);
                 var firstChar = eachSteps[i][0];
                 if(firstChar == '|'){
+                    if(context != 1){
+                        var stepdata = new StepData();
+                        stepdata.unitStep = "";
+                        stepdata.unitCOP = [];
+                        this.steps.push(stepdata); 
+                    }
                     var lastIndex = this.steps.length - 1;
                     console.log("lastIndex = ", lastIndex);
                     this.steps[lastIndex].unitCOP.push(eachSteps[i]);
+                    context = 1;
                 }
                 else if(firstChar == '2'){
                 }
                 else{
-                    var stepdata = new StepData();
-                    stepdata.unitStep = eachSteps[i];
-                    stepdata.unitCOP = [];
+                    if(context != 1){
+                        var stepdata = new StepData();
+                        stepdata.unitStep = eachSteps[i];
+                        stepdata.unitCOP = [];
 
-                    this.steps.push(stepdata); 
+                        this.steps.push(stepdata); 
+                    }
+                    else{
+                        this.steps[this.steps.length - 1].unitStep = eachSteps[i];
+                    }
+                    context = 2;
                 }
             } 
             finish();

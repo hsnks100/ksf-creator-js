@@ -6,7 +6,7 @@
 
 
 
-const mapNumbers = require('electron').remote.require('./result') 
+const mapNumbers = require('electron').remote.require('./ksfinfo') 
 $('#btn').click(function(){
     window.alert("ttt");
     mapNumbers.loadKSF();

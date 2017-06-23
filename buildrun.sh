@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 
-make
-electron ./
+
+tsc
+./node_modules/.bin/electron .

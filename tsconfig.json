@@ -8,7 +8,7 @@
         "noLib": false,
         "moduleResolution": "node",
         "rootDir": "./",
-        "sourceMap": true,
+        "outDir": "js",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true 
     },

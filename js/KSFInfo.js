@@ -67,4 +67,3 @@ var KSFInfo = (function () {
     };
     return KSFInfo;
 }());
-//# sourceMappingURL=KSFInfo.js.map

@@ -65,4 +65,3 @@ var Bullet = (function (_super) {
     };
     return Bullet;
 }(Phaser.Sprite));
-//# sourceMappingURL=KSFView.js.map

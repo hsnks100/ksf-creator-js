@@ -7,7 +7,7 @@ var mainWindow;
 function createWindow() {
     mainWindow = new BrowserWindow({ width: 300, height: 300 });
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
+        pathname: path.join(__dirname + "/../", 'index.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -35,4 +35,3 @@ exports.loadDataFromFile = function () {
     var fs = require('fs');
     return fs.readFileSync(file, 'utf8');
 };
-//# sourceMappingURL=main.js.map

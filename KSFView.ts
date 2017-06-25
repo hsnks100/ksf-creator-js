@@ -1,28 +1,6 @@
 /// <reference path="node_modules/phaser/typescript/phaser.d.ts"/> 
 /// <reference path="KSFInfo.ts"/>
 
-// class KSFView {
-    // constructor() {
-        // this.game = new Phaser.Game(800, 600, Phaser.CANVAS, 'ksf-view', { preload: this.preload, create: this.create });
-    // }
-
-    // game: Phaser.Game;
-
-    // public preload () {
-        // console.log("newlog", this.game);
-        // this.game.load.image('logo', 'phaser.png');
-    // }
-
-    // public create() {
-        // var logo = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
-        // logo.anchor.setTo(0.5, 0.5);
-        // // new KSFInfo('asdasd');
-    // }
-    // public loadKSF(ksf : KSFInfo) {
-        // console.log(ksf); 
-    // } 
-// }
-
 
 class KSFView {
     elapsedTime:number = 0;
@@ -91,14 +69,7 @@ class Bullet extends Phaser.Sprite {
             this.destroy();
         }
     }
-}
-
-
-
-
-
-
-
+} 
 
 
 

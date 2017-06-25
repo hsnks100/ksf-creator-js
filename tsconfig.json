@@ -6,7 +6,11 @@
         "noImplicitAny": false,
         "removeComments": true,
         "noLib": false,
-        "rootDir": "./"
+        "moduleResolution": "node",
+        "rootDir": "./",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true 
     },
     "include": [
         "*"

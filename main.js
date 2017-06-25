@@ -27,15 +27,12 @@ app.on('activate', function () {
         createWindow();
     }
 });
-exports.loadKSF = function () {
+exports.loadDataFromFile = function () {
     var dialog = require('electron').dialog;
     var file = dialog.showOpenDialog({ properties: ['openFile'] });
     file = file.length ? file[0] : '';
     console.log(file);
-    var ksfinfo = new KSFInfo("mytitle");
-    if (file !== '') {
-        ksfinfo.loadKSF(file, function () {
-            ksfinfo.showData();
-        });
-    }
+    var fs = require('fs');
+    return fs.readFileSync(file, 'utf8');
 };
+//# sourceMappingURL=main.js.map

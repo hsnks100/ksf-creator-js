@@ -1,3 +1,6 @@
+/// <reference path="KSFInfo.ts"/>
+
+
 
 const electron = require('electron')
 // Module to control application life.
@@ -57,26 +60,14 @@ app.on('activate', function () {
 
 
 
-exports.loadKSF = function() { 
+exports.loadDataFromFile = function() { 
     const {dialog} = require('electron');
     var file = dialog.showOpenDialog({properties: ['openFile']});
     file = file.length ? file[0] : '';
     console.log(file);
+    var fs = require('fs');
 
-    // console.log(fs);
-    //
-    var ksfinfo = new KSFInfo("mytitle");
-    // ksfinfo.showData();
-
-
-    if (file !== '') {
-        ksfinfo.loadKSF(file, () => { 
-            ksfinfo.showData();
-        });
-
-        // console.log(ksfinfo);
-        // console.log(ksfinfo.title);
-    } 
+    return fs.readFileSync(file, 'utf8'); 
 }
 
 

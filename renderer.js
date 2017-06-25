@@ -5,14 +5,20 @@
 
 
 
+var ksfView = null;
+var $ = require('jquery');
 
-const mapNumbers = require('electron').remote.require('./ksfinfo') 
-$('#btn').click(function(){
-    window.alert("ttt");
-    mapNumbers.loadKSF();
-});
+const ksfinfo = require('electron').remote.require('./main') 
+$('#btn1').click(function(){
+    var data = ksfinfo.loadDataFromFile();
+    var ksf = new KSFInfo();
+    ksf.loadKSF(data);
+    ksfView.loadKSF(ksf);
 
+}); 
 
-
-
-
+window.onload = function(){
+    var game = new KSFView();
+    ksfView = game;
+    // global.ksfView = game;
+}

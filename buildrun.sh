@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 
-tsc
+tsc 
 ./node_modules/.bin/electron .

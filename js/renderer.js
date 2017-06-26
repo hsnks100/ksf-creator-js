@@ -6,6 +6,7 @@
 
 
 var ksfView = null;
+var game = null;
 var $ = require('jquery');
 
 const ksfinfo = require('electron').remote.require('./main') 
@@ -13,8 +14,7 @@ $('#btn1').click(function(){
     var data = ksfinfo.loadDataFromFile();
     var ksf = new KSFInfo();
     ksf.loadKSF(data);
-    ksfView.loadKSF(ksf);
-
+    ksfView.loadKSF(ksf); 
 }); 
 
 window.onload = function(){
@@ -22,3 +22,7 @@ window.onload = function(){
     ksfView = game;
     // global.ksfView = game;
 }
+
+$( window ).resize(function() {
+    ksfView.resize();
+});

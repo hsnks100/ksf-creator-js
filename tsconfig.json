@@ -7,14 +7,11 @@
         "removeComments": true,
         "noLib": false,
         "moduleResolution": "node",
-        "rootDir": "./",
-        "outDir": "js",
+        "rootDir": "./ts/",
+        "outDir": "./js/",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true 
     },
-    "include": [
-        "*"
-    ],
     "exclude": [
         "node_modules"
     ]

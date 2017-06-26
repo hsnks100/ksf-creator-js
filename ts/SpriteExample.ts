@@ -1,8 +1,9 @@
-/// <reference path="node_modules/phaser/typescript/phaser.d.ts"/> 
+
+/// <reference path="../node_modules/phaser/typescript/phaser.d.ts"/> 
 /// <reference path="KSFInfo.ts"/>
 
 
-class KSFView {
+class SpriteExample {
     elapsedTime:number = 0;
     lastCreatedTime:number = 0;
     game: Phaser.Game;

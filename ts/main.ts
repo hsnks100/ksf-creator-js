@@ -23,6 +23,7 @@ function createWindow () {
         protocol: 'file:',
         slashes: true
     }))
+    mainWindow.maximize();
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
@@ -61,13 +62,13 @@ app.on('activate', function () {
 
 
 exports.loadDataFromFile = function() { 
-    const {dialog} = require('electron');
-    var file = dialog.showOpenDialog({properties: ['openFile']});
-    file = file.length ? file[0] : '';
-    console.log(file);
+    // const {dialog} = require('electron');
+    // var file = dialog.showOpenDialog({properties: ['openFile']});
+    // file = file.length ? file[0] : '';
+    // console.log(file);
     var fs = require('fs');
 
-    return fs.readFileSync(file, 'utf8'); 
+    return fs.readFileSync('/home/ksoo/git/ksf-creator-js/sample.ksf', 'utf8'); 
 }
 
 

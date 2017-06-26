@@ -8,60 +8,103 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var $ = require('jquery');
+var Arrow = (function (_super) {
+    __extends(Arrow, _super);
+    function Arrow(game, arrow) {
+        var _this = _super.call(this, game, 0, 0, arrow) || this;
+        _this.game = game;
+        return _this;
+    }
+    Arrow.prototype.update = function () {
+    };
+    return Arrow;
+}(Phaser.Sprite));
 var KSFView = (function () {
     function KSFView() {
         var _this = this;
-        this.elapsedTime = 0;
-        this.lastCreatedTime = 0;
-        this.afterCreating = false;
+        this.arrowSize = 16;
         this.preload = function () {
-            _this.game.load.image('bullet', 'img/bullet.png');
-            console.log(_this.game.time);
+            _this.game.load.image('1', 'img/1.png');
+            _this.game.load.image('3', 'img/3.png');
+            _this.game.load.image('5', 'img/5.png');
+            _this.game.load.image('7', 'img/7.png');
+            _this.game.load.image('9', 'img/9.png');
+            _this.game.load.image('cop', 'img/cop.png');
+            _this.game.load.image('selcop', 'img/cop2.png');
         };
         this.update = function () {
-            _this.elapsedTime += _this.game.time.desiredFpsMult;
-            if (_this.elapsedTime - _this.lastCreatedTime > 1) {
-                var b = new Bullet(_this.game);
-                _this.game.add.existing(b);
-                _this.lastCreatedTime = _this.elapsedTime;
+        };
+        this.resize = function () {
+            _this.game.scale.setGameSize(_this.game.scale.width, $(window).height() - 100);
+        };
+        this.drawLine = function (x, y) {
+            x += _this.arrowSize;
+            var line = new Phaser.Line(x, y, x + _this.arrowSize * 10, y);
+            var graphicsLine = _this.game.add.graphics(0, 0);
+            graphicsLine.clear();
+            graphicsLine.lineStyle(1, 0xff0000, 1);
+            graphicsLine.moveTo(line.start.x, line.start.y);
+            graphicsLine.lineTo(line.end.x, line.end.y);
+            graphicsLine.endFill();
+        };
+        this.drawArrow = function (x, y, unitStep) {
+            x += _this.arrowSize;
+            var offsetToArrow = {
+                0: '1',
+                1: '7',
+                2: '5',
+                3: '9',
+                4: '3',
+                5: '1',
+                6: '7',
+                7: '5',
+                8: '9',
+                9: '3'
+            };
+            for (var offset = 0; offset < unitStep.length; offset++) {
+                if (unitStep[offset] == '1') {
+                    var arrow = new Arrow(_this.game, offsetToArrow[offset]);
+                    _this.game.add.existing(arrow);
+                    arrow.position.x = x + offset * _this.arrowSize;
+                    arrow.position.y = y;
+                }
+            }
+        };
+        this.drawCOP = function (x, y, unitCOP) {
+            if (unitCOP.length >= 1) {
+                _this.game.add.sprite(x, y, 'cop');
             }
         };
         this.game = new Phaser.Game(800, 600, Phaser.CANVAS, 'ksf-view', { preload: this.preload, create: this.create,
             update: this.update });
-        this.elapsedTime = 0;
-        console.log("elapsedTime", this.elapsedTime);
     }
     KSFView.prototype.create = function () {
-        console.log(this, "at create");
+        this.game.stage.backgroundColor = '#FFFFFF';
+    };
+    KSFView.prototype.loadKSF = function (ksfinfo) {
+        console.log(ksfinfo);
+        var y = 0;
+        var x = 0;
+        var yMargin = this.arrowSize;
+        var tickCount = ksfinfo.tickCount;
+        var steps = ksfinfo.steps;
+        for (var i = 0; i < steps.length; i++) {
+            var unitStep = steps[i].unitStep;
+            var unitCOP = steps[i].unitCOP;
+            if (i % tickCount == 0 && y != 0) {
+                this.drawLine(x, y);
+            }
+            this.drawArrow(x, y, unitStep);
+            this.drawCOP(x, y, unitCOP);
+            y += this.arrowSize;
+            if (y + tickCount * this.arrowSize > this.game.scale.height) {
+                this.drawLine(x, y);
+                y = 0;
+                x += this.arrowSize * 11;
+            }
+        }
+        this.game.scale.setGameSize(x, this.game.scale.height);
     };
     return KSFView;
 }());
-function randomRange(min, max) {
-    return Math.random() * (max - min) + min;
-}
-var MyPoint = (function () {
-    function MyPoint() {
-    }
-    return MyPoint;
-}());
-var Bullet = (function (_super) {
-    __extends(Bullet, _super);
-    function Bullet(game) {
-        var _this = _super.call(this, game, 0, 0, 'bullet') || this;
-        _this.game = game;
-        _this.randomAngle = randomRange(0, 3.14 * 2);
-        _this.velocity = randomRange(80, 160);
-        _this.position.x = 400 + Math.cos(_this.randomAngle) * 400;
-        _this.position.y = 300 + Math.sin(_this.randomAngle) * 400;
-        _this.theta = 3.14 + _this.randomAngle;
-        return _this;
-    }
-    Bullet.prototype.update = function () {
-        this.position.x += Math.cos(this.theta) * this.velocity * this.game.time.desiredFpsMult;
-        this.position.y += Math.sin(this.theta) * this.velocity * this.game.time.desiredFpsMult;
-        if (1000 <= this.position.x || this.position.x <= -300) {
-            this.destroy();
-        }
-    };
-    return Bullet;
-}(Phaser.Sprite));

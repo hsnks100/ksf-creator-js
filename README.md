@@ -29,9 +29,13 @@ This project use electron framework for cross-platform.
 
 prefare
 
+'sudo apt install npm' 
+'npm install'
+
+
 npm( + legacy ), typescript(tsc), make
 
-KSF-Creator-JS use typescript for js. You just type 'make'.
+KSF-Creator-JS use typescript for js. You just type './buildrun.sh'.
 
 You can edit Makefile for see detailed instructions.
 
@@ -39,4 +43,6 @@ You can edit Makefile for see detailed instructions.
 ## License
 
 
-???
+Not decided.
+
+

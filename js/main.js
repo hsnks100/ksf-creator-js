@@ -30,5 +30,5 @@ app.on('activate', function () {
 });
 exports.loadDataFromFile = function () {
     var fs = require('fs');
-    return fs.readFileSync('/home/ksoo/git/ksf-creator-js/sample.ksf', 'utf8');
+    return fs.readFileSync('sample.ksf', 'utf8');
 };

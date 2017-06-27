@@ -12,7 +12,7 @@ class StepData {
         this.unitCOP = [];
     }
 }
- class KSFInfo {
+class KSFInfo {
     public title : string;
     public player : string;
     public bpm1 : string;
@@ -37,40 +37,55 @@ class StepData {
         this.steps = []; 
     }
 
-    private getFromRegExp(data, regex) {
-        var res = regex.exec(data);
-        if (res) {
-            return res[1];
+    public getCOP(cop:Array<string>, pattern) {
+        var tick = null;
+        for(let i=0; i<cop.length; i++){
+            var matchs = cop[i].match(pattern);
+            // console.log(matchs);
+            if(matchs != null) { 
+                tick = Number(matchs[1]);
+            }
         }
-        return null;
+        if(tick == null)
+            return -1;
+        else
+            return tick; 
+    }
+    public getTickCount(cop:Array<string>) {
+        return this.getCOP(cop, /\|T(.+)\|/);
+    }
+    public getBPM(cop:Array<string>) {
+        return this.getCOP(cop, /\|B(.+)\|/);
     }
 
+
     public showData() {
-        console.log(this);
+        // console.log(this);
     }
 
     public loadKSF(data:string) {
         this.title = "temptitle"; 
         // console.log(data);
 
-        this.title = this.getFromRegExp(data, /^#TITLE:(.*);/m).trim();
-        this.titleFile = this.getFromRegExp(data, /^#TITLEFILE:(.*);/m).trim();
-        this.tickCount = Number(this.getFromRegExp(data, /^#TICKCOUNT:(.*);/m));
-        this.startTime = Number(this.getFromRegExp(data, /^#STARTTIME:(.*);/m));
-        this.introFile = this.getFromRegExp(data, /^#INTROFILE:(.*);/m).trim();
-        this.songFile = this.getFromRegExp(data, /^#SONGFILE:(.*);/m).trim();
-        this.discFile = this.getFromRegExp(data, /^#DISCFILE:(.*);/m).trim();
-        this.difficulty = Number(this.getFromRegExp(data, /^#DIFFICULTY:(.*);/m));
+        this.title = (data.match(/^#TITLE:(.*);/m) || [,""])[1].trim();
+        this.titleFile = (data.match(/^#TITLEFILE:(.*);/m) || [,""])[1].trim();
+        this.tickCount = Number((data.match(/^#TICKCOUNT:(.*);/m) || [,""])[1]);
+        this.startTime = Number((data.match(/^#STARTTIME:(.*);/m) || [,""])[1]);
+        this.introFile = (data.match(/^#INTROFILE:(.*);/m) || [,""])[1].trim();
+        this.songFile = (data.match(/^#SONGFILE:(.*);/m) || [,""])[1].trim();
+        this.discFile = (data.match(/^#DISCFILE:(.*);/m) || [,""])[1].trim();
+        this.difficulty = Number((data.match(/^#DIFFICULTY:(.*);/m) || [,""])[1]);
+
 
 
         console.log("first steps length = ", this.steps.length);
         // expression = TEXT("^#STEP:([.\\n]+)");
-        var stringStep = this.getFromRegExp(data, /#STEP:([\S\s]+)/);
+        var stringStep = (data.match(/#STEP:([\S\s]+)/) || [,""])[1]; 
         stringStep = stringStep.trim();
         var eachSteps = stringStep.split('\n');
         let context : number = 0;
         for(var i=0; i<eachSteps.length; i++){
-            console.log(eachSteps[i]);
+            // console.log(eachSteps[i]);
             var firstChar = eachSteps[i][0];
             if(firstChar == '|'){
                 if(context != 1){
@@ -80,7 +95,7 @@ class StepData {
                     this.steps.push(stepdata); 
                 }
                 var lastIndex = this.steps.length - 1;
-                console.log("lastIndex = ", lastIndex);
+                // console.log("lastIndex = ", lastIndex);
                 this.steps[lastIndex].unitCOP.push(eachSteps[i]);
                 context = 1;
             }

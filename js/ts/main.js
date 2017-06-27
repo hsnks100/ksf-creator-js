@@ -11,6 +11,7 @@ function createWindow() {
         protocol: 'file:',
         slashes: true
     }));
+    mainWindow.maximize();
     mainWindow.webContents.openDevTools();
     mainWindow.on('closed', function () {
         mainWindow = null;
@@ -28,10 +29,6 @@ app.on('activate', function () {
     }
 });
 exports.loadDataFromFile = function () {
-    var dialog = require('electron').dialog;
-    var file = dialog.showOpenDialog({ properties: ['openFile'] });
-    file = file.length ? file[0] : '';
-    console.log(file);
     var fs = require('fs');
-    return fs.readFileSync(file, 'utf8');
+    return fs.readFileSync('sample.ksf', 'utf8');
 };

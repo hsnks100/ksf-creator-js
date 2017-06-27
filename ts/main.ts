@@ -51,7 +51,8 @@ app.on('activate', function () {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
-        createWindow()
+        createWindow();
+
     }
 })
 
@@ -61,14 +62,16 @@ app.on('activate', function () {
 
 
 
+
 exports.loadDataFromFile = function() { 
     // const {dialog} = require('electron');
     // var file = dialog.showOpenDialog({properties: ['openFile']});
     // file = file.length ? file[0] : '';
     // console.log(file);
-    var fs = require('fs');
-
-    return fs.readFileSync('/home/ksoo/git/ksf-creator-js/sample.ksf', 'utf8'); 
+    var fs = require('fs'); 
+    return fs.readFileSync('sample.ksf', 'utf8'); 
 }
+
+
 
 

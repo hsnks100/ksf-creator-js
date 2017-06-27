@@ -9,33 +9,43 @@ var KSFInfo = (function () {
         this.title = name;
         this.steps = [];
     }
-    KSFInfo.prototype.getFromRegExp = function (data, regex) {
-        var res = regex.exec(data);
-        if (res) {
-            return res[1];
+    KSFInfo.prototype.getCOP = function (cop, pattern) {
+        var tick = null;
+        for (var i = 0; i < cop.length; i++) {
+            var matchs = cop[i].match(pattern);
+            if (matchs != null) {
+                tick = Number(matchs[1]);
+            }
         }
-        return null;
+        if (tick == null)
+            return -1;
+        else
+            return tick;
+    };
+    KSFInfo.prototype.getTickCount = function (cop) {
+        return this.getCOP(cop, /\|T(.+)\|/);
+    };
+    KSFInfo.prototype.getBPM = function (cop) {
+        return this.getCOP(cop, /\|B(.+)\|/);
     };
     KSFInfo.prototype.showData = function () {
-        console.log(this);
     };
     KSFInfo.prototype.loadKSF = function (data) {
         this.title = "temptitle";
-        this.title = this.getFromRegExp(data, /^#TITLE:(.*);/m).trim();
-        this.titleFile = this.getFromRegExp(data, /^#TITLEFILE:(.*);/m).trim();
-        this.tickCount = Number(this.getFromRegExp(data, /^#TICKCOUNT:(.*);/m));
-        this.startTime = Number(this.getFromRegExp(data, /^#STARTTIME:(.*);/m));
-        this.introFile = this.getFromRegExp(data, /^#INTROFILE:(.*);/m).trim();
-        this.songFile = this.getFromRegExp(data, /^#SONGFILE:(.*);/m).trim();
-        this.discFile = this.getFromRegExp(data, /^#DISCFILE:(.*);/m).trim();
-        this.difficulty = Number(this.getFromRegExp(data, /^#DIFFICULTY:(.*);/m));
+        this.title = (data.match(/^#TITLE:(.*);/m) || [, ""])[1].trim();
+        this.titleFile = (data.match(/^#TITLEFILE:(.*);/m) || [, ""])[1].trim();
+        this.tickCount = Number((data.match(/^#TICKCOUNT:(.*);/m) || [, ""])[1]);
+        this.startTime = Number((data.match(/^#STARTTIME:(.*);/m) || [, ""])[1]);
+        this.introFile = (data.match(/^#INTROFILE:(.*);/m) || [, ""])[1].trim();
+        this.songFile = (data.match(/^#SONGFILE:(.*);/m) || [, ""])[1].trim();
+        this.discFile = (data.match(/^#DISCFILE:(.*);/m) || [, ""])[1].trim();
+        this.difficulty = Number((data.match(/^#DIFFICULTY:(.*);/m) || [, ""])[1]);
         console.log("first steps length = ", this.steps.length);
-        var stringStep = this.getFromRegExp(data, /#STEP:([\S\s]+)/);
+        var stringStep = (data.match(/#STEP:([\S\s]+)/) || [, ""])[1];
         stringStep = stringStep.trim();
         var eachSteps = stringStep.split('\n');
         var context = 0;
         for (var i = 0; i < eachSteps.length; i++) {
-            console.log(eachSteps[i]);
             var firstChar = eachSteps[i][0];
             if (firstChar == '|') {
                 if (context != 1) {
@@ -45,7 +55,6 @@ var KSFInfo = (function () {
                     this.steps.push(stepdata);
                 }
                 var lastIndex = this.steps.length - 1;
-                console.log("lastIndex = ", lastIndex);
                 this.steps[lastIndex].unitCOP.push(eachSteps[i]);
                 context = 1;
             }

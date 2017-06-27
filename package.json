@@ -23,7 +23,15 @@
     "electron-rebuild": "^1.2.1"
   },
   "dependencies": {
+    "better-console": "^1.0.0",
+    "del": "^3.0.0",
+    "extend": "^3.0.1",
     "jquery": "^3.2.1",
-    "phaser": "^2.6.2"
+    "map-stream": "0.0.7",
+    "phaser": "^2.6.2",
+    "require-dot-file": "^0.4.0",
+    "run-sequence": "^1.2.2",
+    "semantic-ui": "^2.2.10",
+    "yamljs": "^0.3.0"
   }
 }

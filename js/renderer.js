@@ -17,15 +17,29 @@ $('#btn1').click(function(){
     ksfView.loadKSF(ksf); 
 }); 
 
+$('#btn2').click(function(){
+    $('.ui.sidebar')
+        .sidebar('toggle') ;
+
+});
+
 window.onload = function(){
     var game = new KSFView();
     ksfView = game;
     window.addEventListener('keydown', ksfView.keyUp, true)
+    $('.overlay.sidebar')
+        .sidebar({
+            overlay: true
+        })
+        .sidebar('toggle')
+;
+    // $('.ui.sidebar').sidebar('toggle');
     // global.ksfView = game;
 }
 
 $( window ).resize(function() {
-    ksfView.resize();
+    ksfView && ksfView.resize();
+    // ksfView.resize();
 });
 
 

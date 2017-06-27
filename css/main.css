@@ -5,8 +5,8 @@
     background-color: pink;  
 }
 
-.lower {
-    bottom: 0;
+.ksf-view {
+    /* bottom: 0; */
     background-color: blue;    
     overflow:scroll;
 }
@@ -15,3 +15,24 @@
     height:auto;
 }
 
+
+.ui.grid.stackable {
+    margin-top: -1rem;
+    margin-bottom: -1rem;
+    margin-left: 0rem;
+    margin-right: 0rem;
+}
+
+.ksfheader.ui.input.item {
+    padding: 0em 0em;
+}
+
+.ui.grid.stackable>.row{
+    padding:1rem;
+}
+
+
+/* .ui.grid>.row { */
+     /* padding-top: 0rem;  */
+     /* padding-bottom: 0rem;  */
+/* } */

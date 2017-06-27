@@ -16,27 +16,57 @@
          //   var game = new SimpleGame();
         //}
     </script>
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+    <script src="./semantic/dist/semantic.js"></script>
   </head>
   <body>
-      <div class="upper">
+      <div class="ui menu">
+          <div class="ui container">
+              <div class="ui simple dropdown item">
+                  File
+                  <i class="dropdown icon"></i>
+                  <div class="menu">
+                      <div class="item" id="btn1"><i class="edit icon"></i>Open KSF</div>
+                      <div class="item" id="btn2"><i class="globe icon"></i> Choose Language</div>
+                      <div class="item"><i class="settings icon"></i> Account Settings</div>
+                  </div>
+              </div>
+              <div class="ui simple dropdown item">
+                  File
+                  <i class="dropdown icon"></i>
+                  <div class="menu">
+                      <div class="item" id="btn1"><i class="edit icon"></i>Open KSF</div>
+                      <div class="item" id="btn2"><i class="globe icon"></i> Choose Language</div>
+                      <div class="item"><i class="settings icon"></i> Account Settings</div>
+                  </div>
+              </div>
+          </div>
+      </div>
 
-        <input type="button" id="btn1" value="Get Data1" />
-        <input type="button" id="btn2" value="Get Data2" />
-        <input type="button" id="btn3" value="Get Data3" />
-        <input type="button" id="btn4" value="Get Data4" />
-
-    </div>
-    <div class="lower"> 
-        <div id="ksf-view"></div> 
-    </div>
-
-
-
-
-
-
-
-    
+      <div class="ui grid stackable">
+          <div class="row">
+              <div class="ui menu  stackable ">
+                  <div class="ui input item ksfheader">
+                      <input type="text" placeholder="BMP">
+                  </div>
+                  <div class="ui input item ksfheader">
+                      <input type="text" placeholder="BMP">
+                  </div>
+                  <div class="ui input item ksfheader">
+                      <input type="text" placeholder="BMP">
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="ksf-view  menu ui" id="ksf-view"></div> 
+          </div>
+      </div>
+      <!-- <div class="lower"> -->
+      <!-- </div> -->
   </body>
 
   <script>

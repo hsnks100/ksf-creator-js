@@ -1,7 +1,8 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts"/> 
 /// <reference path="KSFInfo.ts"/>
 
-var $ = require('jquery');
+var $, jQuery;
+$ = jQuery = require('jquery');
 
 class Arrow extends Phaser.Sprite {
     game:Phaser.Game;
@@ -31,6 +32,7 @@ class KSFView {
     selector:Phaser.Graphics;
     arrows:Phaser.Group;
     lines:Phaser.Group;
+    cops:Phaser.Group;
     selections:Phaser.Group;
 
     constructor() {
@@ -59,14 +61,18 @@ class KSFView {
         this.lines = this.game.add.group();
         this.arrows = this.game.add.group();
         this.selections = this.game.add.group();
+        this.cops = this.game.add.group();
     }
     public update = () => {
     }
     public resize = () => {
         if(this.ksfinfo != null) {
+            this.arrows.removeAll();
+            this.lines.removeAll(); 
+            this.cops.removeAll();
             this.redraw();
         }
-        this.game.scale.setGameSize(this.game.scale.width, $( window ).height() - 100);
+        this.game.scale.setGameSize(this.game.scale.width, $( window ).height() - 170);
     }
 
     public keyUp = (e) => {
@@ -173,7 +179,7 @@ class KSFView {
     public drawCOP = (x, y, unitCOP) => {
         if(unitCOP.length >= 1){
             // let cop = new Phaser.Sprite(
-            this.game.add.sprite(x, y, 'cop');
+            this.cops.add(this.game.add.sprite(x, y, 'cop'));
         }
     }
 

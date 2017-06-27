@@ -8,7 +8,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var $ = require('jquery');
+var $, jQuery;
+$ = jQuery = require('jquery');
 var Arrow = (function (_super) {
     __extends(Arrow, _super);
     function Arrow(game, arrow) {
@@ -43,14 +44,18 @@ var KSFView = (function () {
             _this.lines = _this.game.add.group();
             _this.arrows = _this.game.add.group();
             _this.selections = _this.game.add.group();
+            _this.cops = _this.game.add.group();
         };
         this.update = function () {
         };
         this.resize = function () {
             if (_this.ksfinfo != null) {
+                _this.arrows.removeAll();
+                _this.lines.removeAll();
+                _this.cops.removeAll();
                 _this.redraw();
             }
-            _this.game.scale.setGameSize(_this.game.scale.width, $(window).height() - 100);
+            _this.game.scale.setGameSize(_this.game.scale.width, $(window).height() - 170);
         };
         this.keyUp = function (e) {
             if (e.key == "ArrowDown") {
@@ -144,7 +149,7 @@ var KSFView = (function () {
         };
         this.drawCOP = function (x, y, unitCOP) {
             if (unitCOP.length >= 1) {
-                _this.game.add.sprite(x, y, 'cop');
+                _this.cops.add(_this.game.add.sprite(x, y, 'cop'));
             }
         };
         this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'ksf-view', { preload: this.preload, create: this.create,

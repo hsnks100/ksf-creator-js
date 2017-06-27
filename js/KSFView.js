@@ -38,19 +38,81 @@ var KSFView = (function () {
             _this.game.load.image('cop', 'img/cop.png');
             _this.game.load.image('selcop', 'img/cop2.png');
         };
+        this.create = function () {
+            _this.game.stage.backgroundColor = '#FFFFFF';
+            _this.lines = _this.game.add.group();
+            _this.arrows = _this.game.add.group();
+            _this.selections = _this.game.add.group();
+        };
         this.update = function () {
         };
         this.resize = function () {
             if (_this.ksfinfo != null) {
-                var xCount = _this.drawKSF();
-                _this.drawLines(xCount);
+                _this.redraw();
             }
             _this.game.scale.setGameSize(_this.game.scale.width, $(window).height() - 100);
+        };
+        this.keyUp = function (e) {
+            if (e.key == "ArrowDown") {
+                _this.selectedIndex++;
+                _this.drawSelection();
+            }
+            if (e.key == "ArrowUp") {
+                _this.selectedIndex--;
+                _this.drawSelection();
+            }
+            if (e.key == "ArrowLeft") {
+                var prevY = _this.index2Coord[_this.selectedIndex].y;
+                var prevX = _this.index2Coord[_this.selectedIndex].x;
+                var minDiffY = 9999999;
+                var goalIndex = _this.selectedIndex;
+                for (var i = _this.selectedIndex - 1; i >= 0; i--) {
+                    var diffY = Math.abs(_this.index2Coord[i].y - prevY);
+                    if (_this.index2Coord[i].x != prevX) {
+                        if (minDiffY > diffY) {
+                            minDiffY = diffY;
+                            goalIndex = i;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                }
+                _this.selectedIndex = goalIndex;
+                _this.drawSelection();
+            }
+            if (e.key == "ArrowRight") {
+                var prevY = _this.index2Coord[_this.selectedIndex].y;
+                var prevX = _this.index2Coord[_this.selectedIndex].x;
+                var minDiffY = 9999999;
+                var goalIndex = _this.selectedIndex;
+                for (var i = _this.selectedIndex + 1; i < _this.ksfinfo.steps.length; i++) {
+                    var diffY = Math.abs(_this.index2Coord[i].y - prevY);
+                    if (_this.index2Coord[i].x != prevX) {
+                        if (minDiffY > diffY) {
+                            minDiffY = diffY;
+                            goalIndex = i;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                }
+                _this.selectedIndex = goalIndex;
+                _this.drawSelection();
+            }
+            console.log(e);
+        };
+        this.redraw = function () {
+            var xCount = _this.drawKSF();
+            _this.drawLines(xCount);
+            _this.selector = _this.game.add.graphics(0, 0);
         };
         this.drawLine = function (x, y, color) {
             x += _this.arrowSize;
             var line = new Phaser.Line(x, y, x + _this.arrowSize * 10, y);
-            var graphicsLine = _this.game.add.graphics(0, 0);
+            var graphicsLine = new Phaser.Graphics(_this.game, 0, 0);
+            _this.lines.add(graphicsLine);
             graphicsLine.clear();
             graphicsLine.lineStyle(1, color, 1);
             graphicsLine.moveTo(line.start.x, line.start.y);
@@ -74,7 +136,7 @@ var KSFView = (function () {
             for (var offset = 0; offset < unitStep.length; offset++) {
                 if (unitStep[offset] == '1' || unitStep[offset] == '4' || 0) {
                     var arrow = new Arrow(_this.game, offsetToArrow[offset]);
-                    _this.game.add.existing(arrow);
+                    _this.arrows.add(arrow);
                     arrow.position.x = x + offset * _this.arrowSize;
                     arrow.position.y = y;
                 }
@@ -88,9 +150,6 @@ var KSFView = (function () {
         this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'ksf-view', { preload: this.preload, create: this.create,
             update: this.update });
     }
-    KSFView.prototype.create = function () {
-        this.game.stage.backgroundColor = '#FFFFFF';
-    };
     KSFView.prototype.drawLines = function (xCount) {
         var numberOfEachRow = Math.floor(this.game.scale.height / this.arrowSize / 4);
         numberOfEachRow--;
@@ -114,7 +173,6 @@ var KSFView = (function () {
         }
     };
     KSFView.prototype.drawKSF = function () {
-        this.game.world.removeAll();
         var xCount = 1;
         var y = 0;
         var x = 0;
@@ -137,6 +195,7 @@ var KSFView = (function () {
             else {
             }
             this.index2Coord[i] = { x: x, y: y };
+            this.coord2index[JSON.stringify({ x: x, y: y })] = i;
             this.drawArrow(x, y, unitStep);
             this.drawCOP(x, y, unitCOP);
             var newTick = this.ksfinfo.getTickCount(unitCOP);
@@ -147,17 +206,23 @@ var KSFView = (function () {
             y += yMargin;
         }
         console.log("x : ", x);
+        console.log(this.coord2index);
         this.game.scale.setGameSize(x + this.arrowSize * 11, this.game.scale.height);
         return xCount;
     };
+    KSFView.prototype.drawSelection = function () {
+        var steps = this.ksfinfo.steps;
+        this.selector.clear();
+        this.selector.beginFill(0xFF700B, 0.3);
+        var x = this.index2Coord[this.selectedIndex].x + this.arrowSize;
+        var y = this.index2Coord[this.selectedIndex].y;
+        this.selector.drawRect(x, y, this.arrowSize * 10, this.arrowSize);
+        this.selector.endFill();
+    };
     KSFView.prototype.loadKSF = function (ksfinfo) {
         this.ksfinfo = ksfinfo;
-        var xCount = this.drawKSF();
-        this.drawLines(xCount);
-        var steps = this.ksfinfo.steps;
-        for (var i = 0; i < steps.length; i++) {
-            this.drawLine(this.index2Coord[i].x, this.index2Coord[i].y, 0x00ff00);
-        }
+        this.redraw();
+        this.drawSelection();
     };
     return KSFView;
 }());

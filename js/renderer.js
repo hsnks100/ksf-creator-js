@@ -20,9 +20,15 @@ $('#btn1').click(function(){
 window.onload = function(){
     var game = new KSFView();
     ksfView = game;
+    window.addEventListener('keydown', ksfView.keyUp, true)
     // global.ksfView = game;
 }
 
 $( window ).resize(function() {
     ksfView.resize();
 });
+
+
+
+
+

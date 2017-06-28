@@ -6,9 +6,20 @@ var StepData = (function () {
 }());
 var KSFInfo = (function () {
     function KSFInfo(name) {
+        this.observers = [];
         this.title = name;
         this.steps = [];
     }
+    KSFInfo.prototype.attach = function (observer) {
+        this.observers.push(observer);
+    };
+    KSFInfo.prototype.detach = function (observer) {
+    };
+    KSFInfo.prototype.notifyObservers = function () {
+        for (var i = 0; i < this.observers.length; i++) {
+            this.observers[i].reflectData();
+        }
+    };
     KSFInfo.prototype.getCOP = function (cop, pattern) {
         var tick = null;
         for (var i = 0; i < cop.length; i++) {
@@ -35,6 +46,7 @@ var KSFInfo = (function () {
         this.title = (data.match(/^#TITLE:(.*);/m) || [, ""])[1].trim();
         this.titleFile = (data.match(/^#TITLEFILE:(.*);/m) || [, ""])[1].trim();
         this.tickCount = Number((data.match(/^#TICKCOUNT:(.*);/m) || [, ""])[1]);
+        this.bpm1 = Number((data.match(/^#BPM:(.*);/m) || [, ""])[1]);
         this.startTime = Number((data.match(/^#STARTTIME:(.*);/m) || [, ""])[1]);
         this.introFile = (data.match(/^#INTROFILE:(.*);/m) || [, ""])[1].trim();
         this.songFile = (data.match(/^#SONGFILE:(.*);/m) || [, ""])[1].trim();

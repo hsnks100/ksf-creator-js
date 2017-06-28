@@ -14,7 +14,11 @@ $('#btn1').click(function(){
     var data = ksfinfo.loadDataFromFile();
     var ksf = new KSFInfo();
     ksf.loadKSF(data);
-    ksfView.loadKSF(ksf); 
+
+    ksf.attach(ksfView);
+    ksfView.setKSF(ksf);
+
+    ksf.notifyObservers();
 }); 
 
 $('#btn2').click(function(){

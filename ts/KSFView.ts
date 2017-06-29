@@ -11,15 +11,10 @@ class Arrow extends Phaser.Sprite {
     public constructor(game:Phaser.Game, arrow:string) { 
         super(game, 0, 0, arrow);
         this.game = game;
-        // this.anchor.x = 0;
         this.anchor.y = 0;
     }
 
-    public update() {
-
-        // if(false) {
-            // this.destroy();
-        // }
+    public update() { 
     }
 } 
 class KSFView {
@@ -50,12 +45,8 @@ class KSFView {
         this.game.load.image('9', 'img/9.png'); 
         this.game.load.image('cop', 'img/cop.png'); 
         this.game.load.image('selcop', 'img/cop2.png'); 
-
-
-
     } 
     public create = () => {
-        // this.game.add.existing(b);
         this.game.stage.backgroundColor = '#FFFFFF';
 
         this.lines = this.game.add.group();
@@ -132,11 +123,9 @@ class KSFView {
     }
 
     public redraw = () => {
-        // this.game.world.removeAll();
         var xCount = this.drawKSF();
         this.drawLines(xCount);
         this.selector = this.game.add.graphics(0, 0);
-        // this.selector.lineStyle(10, 0xFF0000, 0.8);
     }
 
     public drawLine = (x, y, color) => {
@@ -178,20 +167,12 @@ class KSFView {
 
     public drawCOP = (x, y, unitCOP) => {
         if(unitCOP.length >= 1){
-            // let cop = new Phaser.Sprite(
             this.cops.add(this.game.add.sprite(x, y, 'cop'));
         }
     }
 
 
     public drawLines(xCount) {
-        // this.drawLine(x, y, 0xffaddb);
-        // if( i % (tickCount * 4) == 0){
-        // this.drawLine(x, y, 0xff0000);
-        // }
-        // else{
-        // this.drawLine(x, y, 0xffaddb);
-        // }
         var numberOfEachRow = Math.floor(this.game.scale.height / this.arrowSize / 4);
         numberOfEachRow--;
         var lineCount = numberOfEachRow * xCount;
@@ -236,8 +217,6 @@ class KSFView {
             }
             let unitCOP = steps[i].unitCOP;
             if(y + 4 * this.arrowSize >= this.game.scale.height - this.arrowSize) {
-                // this.drawLine2(x, y);
-                // this.drawLine(x, y);
                 y = 0;
                 x += this.arrowSize * 11;
                 xCount++;
@@ -250,7 +229,6 @@ class KSFView {
             this.coord2index[JSON.stringify({x:x, y:y})] = i;
             this.drawArrow(x, y, unitStep);
             this.drawCOP(x, y, unitCOP);
-            // this.drawLine(x, this.game.scale.height);
 
             let newTick = this.ksfinfo.getTickCount(unitCOP);
             if(newTick != -1){
@@ -272,18 +250,13 @@ class KSFView {
         var x = this.index2Coord[this.selectedIndex].x + this.arrowSize;
         var y = this.index2Coord[this.selectedIndex].y;
         this.selector.drawRect(x, y, this.arrowSize * 10, this.arrowSize);
-        this.selector.endFill();
-
+        this.selector.endFill(); 
     }
+
     public loadKSF(ksfinfo : KSFInfo) {
-        this.ksfinfo = ksfinfo;
-
-
-        this.redraw();
-
-        this.drawSelection();
-
-
+        this.ksfinfo = ksfinfo; 
+        this.redraw(); 
+        this.drawSelection(); 
     }
 
 }

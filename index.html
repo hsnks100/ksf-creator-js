@@ -1,76 +1,95 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
+    <head>
+        <meta charset="UTF-8">
 
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
 
-    <title>Hello World!</title>
+        <title>Hello World!</title>
 
-    <script src="node_modules/phaser/build/phaser.js"></script> 
-    <script src="js/KSFView.js"></script> 
-    <script src="js/KSFInfo.js"></script> 
-    <!-- <script src="sg.js"></script>  -->
+        <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+        <script src="node_modules/phaser/build/phaser.js"></script> 
+        <script src="node_modules/jquery/dist/jquery.js"></script> 
+        <script src="node_modules/jquery-ui-dist/jquery-ui.js"></script> 
+        <script>if (window.module) module = window.module;</script>
+
+
+        <script>
+            require('./js/KSFView.js')
+            require('./js/KSFInfo.js')
+            require('semantic-ui')
+        </script>
+
+        <!-- <script src="js/KSFView.js"></script>  -->
+        <!-- <script src="js/KSFInfo.js"></script>  -->
+
+        <!-- // You can also require other files to run in this process -->
+        <!-- <script> -->
+            <!-- require('./js/renderer.js') -->
+        <!-- </script> -->
+        <link rel="stylesheet" type="text/css" href="node_modules/semantic-ui/dist/semantic.min.css">
+        <script
+            src="https://code.jquery.com/jquery-3.1.1.min.js"
+integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
     <script>
-        //window.onload = function(){
-         //   var game = new SimpleGame();
-        //}
+        require('./js/renderer.js');
     </script>
-    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
-    <script
-        src="https://code.jquery.com/jquery-3.1.1.min.js"
-  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-    crossorigin="anonymous"></script>
-    <script src="./semantic/dist/semantic.js"></script>
-  </head>
-  <body>
-      <div class="ui menu">
-          <div class="ui container">
-              <div class="ui simple dropdown item">
-                  File
-                  <i class="dropdown icon"></i>
-                  <div class="menu">
-                      <div class="item" id="btn1"><i class="edit icon"></i>Open KSF</div>
-                      <div class="item" id="btn2"><i class="globe icon"></i> Choose Language</div>
-                      <div class="item"><i class="settings icon"></i> Account Settings</div>
-                  </div>
-              </div>
-              <div class="ui simple dropdown item">
-                  File
-                  <i class="dropdown icon"></i>
-                  <div class="menu">
-                      <div class="item" id="btn1"><i class="edit icon"></i>Open KSF</div>
-                      <div class="item" id="btn2"><i class="globe icon"></i> Choose Language</div>
-                      <div class="item"><i class="settings icon"></i> Account Settings</div>
-                  </div>
-              </div>
-          </div>
-      </div>
+</head>
+<body>
+    <div class="ui menu">
+        <div class="ui container">
+            <div class="ui simple dropdown item">
+                File
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item" id="btn1"><i class="edit icon"></i>Open KSF</div>
+                    <div class="item" id="btn2"><i class="globe icon"></i> Choose Language</div>
+                    <div class="item"><i class="settings icon"></i> Account Settings</div>
+                </div>
+            </div>
+            <div class="ui simple dropdown item">
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item" id=""><i class="edit icon"></i>Open KSF</div>
+                    <div class="item" id=""><i class="globe icon"></i> Choose Language</div>
+                    <div class="item"><i class="settings icon"></i> Account Settings</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-      <div class="ui grid stackable">
-          <div class="row">
-              <div class="ui menu  stackable ">
-                  <div class="ui input item ksfheader">
-                      <input type="text" placeholder="BMP">
-                  </div>
-                  <div class="ui input item ksfheader">
-                      <input type="text" placeholder="BMP">
-                  </div>
-                  <div class="ui input item ksfheader">
-                      <input type="text" placeholder="BMP">
-                  </div>
-              </div>
-          </div>
-          <div class="row">
-              <div class="ksf-view  menu ui" id="ksf-view"></div> 
-          </div>
-      </div>
-      <!-- <div class="lower"> -->
-      <!-- </div> -->
-  </body>
+    <div class="ui grid stackable">
+        <div class="row">
+            <div class="ui menu  stackable ">
+                <div class="ui input item ksfheader">
+                    <input type="text" placeholder="TITLE" id="ksf-title">
+                </div>
+                <div class="ui input item ksfheader">
+                    <input type="text" placeholder="BPM" id="ksf-bpm">
+                </div>
+                <div class="ui input item ksfheader">
+                    <input type="text" placeholder="STARTTIME" id="ksf-starttime">
+                </div>
+                <div class="ui input item ksfheader">
+                    <input type="text" placeholder="TICK" id="ksf-tickcount">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="ksf-view  menu ui" id="ksf-view"></div> 
+        </div>
+    </div>
 
-  <script>
-    // You can also require other files to run in this process
-    require('./js/renderer.js')
-  </script>
+    <div class="ui modal">
+        <h1>han soo</h1>
+    </div>
+    <div id="dialog" title="Basic dialog">
+        <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+    </div>
+
+
+</body>
+
 </html>

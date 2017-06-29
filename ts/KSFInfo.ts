@@ -1,9 +1,22 @@
+/// <reference path="./KSFView.ts"/>
+
+
 /*
  *
  *
  * 전체의 큰 구조는 KSFInfo 
  */
 
+
+
+// var gg = require('./KSFView');
+// console.log(gg);
+import { Observer } from "./KSFView";
+interface KSFData {
+     attach(observer:Observer);
+     detach(observer:Observer);
+     notifyObservers();
+}
 
 class StepData {
     unitStep : string;
@@ -12,10 +25,21 @@ class StepData {
         this.unitCOP = [];
     }
 }
-class KSFInfo {
+export class KSFInfo implements KSFData{
+    public attach(observer:Observer) {
+        this.observers.push(observer);
+    }
+    public detach(observer:Observer) {
+    }
+    public notifyObservers() {
+        for(let i=0; i<this.observers.length; i++) {
+            this.observers[i].reflectData();
+        }
+    }
+    public observers:Array<Observer> = [];
     public title : string;
     public player : string;
-    public bpm1 : string;
+    public bpm1 : number;
     public startTime : number;
     public tickCount : number; // 1,2,3,4,5,6,7,8 
 
@@ -70,6 +94,7 @@ class KSFInfo {
         this.title = (data.match(/^#TITLE:(.*);/m) || [,""])[1].trim();
         this.titleFile = (data.match(/^#TITLEFILE:(.*);/m) || [,""])[1].trim();
         this.tickCount = Number((data.match(/^#TICKCOUNT:(.*);/m) || [,""])[1]);
+        this.bpm1 = Number((data.match(/^#BPM:(.*);/m) || [,""])[1]);
         this.startTime = Number((data.match(/^#STARTTIME:(.*);/m) || [,""])[1]);
         this.introFile = (data.match(/^#INTROFILE:(.*);/m) || [,""])[1].trim();
         this.songFile = (data.match(/^#SONGFILE:(.*);/m) || [,""])[1].trim();
@@ -78,7 +103,7 @@ class KSFInfo {
 
 
 
-        console.log("first steps length = ", this.steps.length);
+        // console.log("first steps length = ", this.steps.length);
         // expression = TEXT("^#STEP:([.\\n]+)");
         var stringStep = (data.match(/#STEP:([\S\s]+)/) || [,""])[1]; 
         stringStep = stringStep.trim();

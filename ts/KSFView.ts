@@ -1,8 +1,29 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts"/> 
-/// <reference path="KSFInfo.ts"/>
+
+// var $, jQuery;
+// // $ = jQuery = require('jquery');
+// $ = jQuery = require('jquery-ui');
+//
+
+// var $ = require('jquery'); 
+// // load everything
+// require('jquery-ui'); 
 
 var $, jQuery;
 $ = jQuery = require('jquery');
+require('jquery-ui');
+
+
+// import 'jquery-ui';
+
+
+
+// var KSFInfo = require('./KSFInfo').KSFInfo;
+import { KSFInfo } from "./KSFInfo";
+
+export interface Observer { 
+     reflectData(); 
+} 
 
 class Arrow extends Phaser.Sprite {
     game:Phaser.Game;
@@ -17,21 +38,38 @@ class Arrow extends Phaser.Sprite {
     public update() { 
     }
 } 
-class KSFView {
+
+
+export class KSFView implements Observer{
     game:Phaser.Game;
     arrowSize:number = 16;
     ksfinfo:KSFInfo = null;
     index2Coord:object = {};
+    index2Column:object = {};
+    columns:number = 1;
     coord2index:object = {};
-    selectedIndex:number = 0;
+    selBegin:number = 0;
+    selEnd:number = 0;
     selector:Phaser.Graphics;
     arrows:Phaser.Group;
     lines:Phaser.Group;
     cops:Phaser.Group;
-    selections:Phaser.Group;
+    selections:Phaser.Group; 
+    public reflectData() {
+        $('#ksf-title').attr("value", this.ksfinfo.title);
+        $('#ksf-bpm').attr("value", this.ksfinfo.bpm1);
+        $('#ksf-tickcount').attr("value", this.ksfinfo.tickCount);
+        $('#ksf-starttime').attr("value", this.ksfinfo.startTime); 
+
+        this.redraw();
+    }
+
+    public getCurrentPosition() {
+        // get current position = cur / total
+    }
 
     constructor() {
-        this.game = new Phaser.Game(800, 600, Phaser.AUTO, 
+        this.game = new Phaser.Game(800, 1000, Phaser.AUTO, 
             'ksf-view', 
             { preload: this.preload, create:this.create,
                 update:this.update });
@@ -49,87 +87,182 @@ class KSFView {
     public create = () => {
         this.game.stage.backgroundColor = '#FFFFFF';
 
+        this.selections = this.game.add.group();
         this.lines = this.game.add.group();
         this.arrows = this.game.add.group();
-        this.selections = this.game.add.group();
         this.cops = this.game.add.group();
     }
     public update = () => {
     }
     public resize = () => {
         if(this.ksfinfo != null) {
-            this.arrows.removeAll();
-            this.lines.removeAll(); 
-            this.cops.removeAll();
             this.redraw();
         }
-        this.game.scale.setGameSize(this.game.scale.width, $( window ).height() - 170);
     }
 
     public keyUp = (e) => {
-        if(e.key == "ArrowDown") {
-            this.selectedIndex++;
-            this.drawSelection();
-        }
-        if(e.key == "ArrowUp") {
-            this.selectedIndex--;
-            this.drawSelection();
-        }
-        if(e.key == "ArrowLeft") {
-            var prevY = this.index2Coord[this.selectedIndex].y;
-            var prevX = this.index2Coord[this.selectedIndex].x;
-            var minDiffY = 9999999;
-            var goalIndex = this.selectedIndex;
-
-            for(let i=this.selectedIndex - 1; i>=0;i--) {
-                var diffY = Math.abs(this.index2Coord[i].y - prevY);
-                if(this.index2Coord[i].x != prevX){
-                    if(minDiffY > diffY) {
-                        minDiffY = diffY; 
-                        goalIndex = i;
-                    }
-                    else{ 
-                        break;
-                    } 
-                } 
-            }
-            this.selectedIndex = goalIndex;
-            this.drawSelection();
-        }
-        if(e.key == "ArrowRight") {
-            var prevY = this.index2Coord[this.selectedIndex].y;
-            var prevX = this.index2Coord[this.selectedIndex].x;
-            var minDiffY = 9999999;
-            var goalIndex = this.selectedIndex;
-
-            for(let i=this.selectedIndex + 1; i<this.ksfinfo.steps.length;i++){
-                var diffY = Math.abs(this.index2Coord[i].y - prevY);
-                if(this.index2Coord[i].x != prevX){
-                    if(minDiffY > diffY) {
-                        minDiffY = diffY; 
-                        goalIndex = i;
-                    }
-                    else{ 
-                        break;
-                    } 
-                } 
-            }
-            this.selectedIndex = goalIndex;
-            this.drawSelection();
-        }
-
-
+        e.preventDefault();
+        var ksfViewDom = $('#ksf-view')[0];
+        var maxScrollLeft = ksfViewDom.scrollWidth - ksfViewDom.clientWidth;
+        var tid = null;
         console.log(e);
+
+        if(e.key.includes("Arrow")){
+            if(e.key == "ArrowDown") {
+                var changeIndex;
+                if(e.shiftKey == true) {
+                    changeIndex = this.selEnd;
+                }
+                else{
+                    changeIndex = this.selBegin;
+                }
+                changeIndex++;
+
+                if(e.shiftKey == true) {
+                    this.selEnd = changeIndex;
+                }
+                else {
+                    this.selBegin = changeIndex;
+                    this.selEnd = this.selBegin;
+                }
+                this.drawSelection();
+            }
+            if(e.key == "ArrowUp") {
+                var changeIndex;
+                if(e.shiftKey == true) {
+                    changeIndex = this.selEnd;
+                }
+                else{
+                    changeIndex = this.selBegin;
+                }
+                changeIndex--;
+
+                if(e.shiftKey == true) {
+                    this.selEnd = changeIndex;
+                }
+                else{
+                    this.selBegin = changeIndex;
+                    this.selEnd = this.selBegin;
+                }
+                this.drawSelection();
+            }
+            if(e.key == "ArrowLeft") {
+                var changeIndex;
+                if(e.shiftKey == true) {
+                    changeIndex = this.selEnd;
+                }
+                else{
+                    changeIndex = this.selBegin;
+                }
+
+                var prevY = this.index2Coord[changeIndex].y;
+                var prevX = this.index2Coord[changeIndex].x;
+                var minDiffY = 9999999;
+                var goalIndex = changeIndex;
+
+                for(let i=changeIndex - 1; i>=0;i--) {
+                    var diffY = Math.abs(this.index2Coord[i].y - prevY);
+                    if(this.index2Coord[i].x != prevX){
+                        if(minDiffY > diffY) {
+                            minDiffY = diffY; 
+                            goalIndex = i;
+                        }
+                        else{ 
+                            break;
+                        } 
+                    } 
+                }
+                if(e.shiftKey == true) {
+                    this.selEnd = goalIndex;
+                }
+                else{
+                    this.selBegin = goalIndex;
+                    this.selEnd = this.selBegin;
+                }
+                this.drawSelection();
+            }
+            if(e.key == "ArrowRight") {
+                var changeIndex;
+                if(e.shiftKey == true) {
+                    changeIndex = this.selEnd;
+                }
+                else{
+                    changeIndex = this.selBegin;
+                }
+
+                var prevY = this.index2Coord[changeIndex].y;
+                var prevX = this.index2Coord[changeIndex].x;
+                var minDiffY = 9999999;
+                var goalIndex = changeIndex;
+
+                for(let i=changeIndex + 1; i<this.ksfinfo.steps.length; i++) {
+                    var diffY = Math.abs(this.index2Coord[i].y - prevY);
+                    if(this.index2Coord[i].x != prevX){
+                        if(minDiffY > diffY) {
+                            minDiffY = diffY; 
+                            goalIndex = i;
+                        }
+                        else{ 
+                            break;
+                        } 
+                    } 
+                }
+                if(e.shiftKey == true) {
+                    this.selEnd = goalIndex;
+                }
+                else{
+                    this.selBegin = goalIndex;
+                    this.selEnd = this.selBegin;
+                }
+                this.drawSelection();
+            } 
+            (() => {
+                var prevScrollLeft = $('#ksf-view').scrollLeft();
+                var goalScrollValue = prevScrollLeft;
+                while( this.index2Coord[this.selEnd].x + this.arrowSize * 11 > goalScrollValue + ksfViewDom.clientWidth ) {
+                    goalScrollValue++;
+                }
+                $('#ksf-view').scrollLeft(goalScrollValue); 
+            })();
+
+            (() => {
+                var prevScrollLeft = $('#ksf-view').scrollLeft();
+                var goalScrollValue = prevScrollLeft;
+                while( this.index2Coord[this.selEnd].x < goalScrollValue) {
+                    goalScrollValue--;
+                }
+                $('#ksf-view').scrollLeft(goalScrollValue);
+            })();
+        }
+
+        else if(e.code == "Space"){
+            // $('.ui.modal').modal('show');
+            $( function() {
+                $("#dialog").dialog();
+            } ); 
+        }
+
+
+
     }
 
     public redraw = () => {
+        this.game.scale.setGameSize(this.game.scale.width, $( window ).height() - 170);
+        this.arrows.removeAll();
+        this.lines.removeAll(); 
+        this.cops.removeAll();
+        this.selections.removeAll();
+        // this.game.world.removeAll();
         var xCount = this.drawKSF();
         this.drawLines(xCount);
         this.selector = this.game.add.graphics(0, 0);
+        // this.selector.blendMode = PIXI.blendModes.NORM;
+        this.selections.add(this.selector);
+        this.drawSelection();
+        // this.selector.lineStyle(10, 0xFF0000, 0.8);
     }
 
-    public drawLine = (x, y, color) => {
-
+    public drawLine = (x, y, color) => { 
         x += this.arrowSize;
         let line = new Phaser.Line(x, y, x + this.arrowSize * 10, y);
         let graphicsLine = new Phaser.Graphics(this.game, 0, 0);
@@ -176,7 +309,7 @@ class KSFView {
         var numberOfEachRow = Math.floor(this.game.scale.height / this.arrowSize / 4);
         numberOfEachRow--;
         var lineCount = numberOfEachRow * xCount;
-        console.log(numberOfEachRow);
+        // console.log(numberOfEachRow);
 
         var x, y;
         x = 0;
@@ -195,9 +328,7 @@ class KSFView {
             }
         }
     }
-    public drawKSF() {
-
-
+    public drawKSF() { 
         var xCount = 1;
         var y = 0;
         var x = 0;
@@ -206,25 +337,30 @@ class KSFView {
         console.log(yMargin);
 
         let steps:any = this.ksfinfo.steps;
-        console.log("step length = ", steps.length);
+        // console.log("step length = ", steps.length);
 
         // 64 / n tick
 
+        var numberOfEachRow = Math.floor(this.game.scale.height / this.arrowSize / 4);
+        console.log(numberOfEachRow);
         for(let i=0; i<steps.length; i++) {
             let unitStep = steps[i].unitStep;
             if(i == steps.length - 1){
-                console.log(unitStep);
+                // console.log(unitStep);
             }
             let unitCOP = steps[i].unitCOP;
-            if(y + 4 * this.arrowSize >= this.game.scale.height - this.arrowSize) {
+
+            if(y >= (numberOfEachRow - 1) * this.arrowSize * 4) {
+                console.log("y = ", y);
+                // this.drawLine2(x, y);
+                // this.drawLine(x, y);
                 y = 0;
                 x += this.arrowSize * 11;
                 xCount++;
             } 
             else{ 
-            }
-
-
+            } 
+            this.index2Column[i] = xCount;
             this.index2Coord[i] = {x:x, y:y};
             this.coord2index[JSON.stringify({x:x, y:y})] = i;
             this.drawArrow(x, y, unitStep);
@@ -237,20 +373,32 @@ class KSFView {
             }
             y += yMargin; 
         } 
-        console.log("x : ", x);
-        console.log(this.coord2index);
+        // console.log("x : ", x);
+        // console.log(this.coord2index);
         this.game.scale.setGameSize(x + this.arrowSize * 11, this.game.scale.height); 
-        return xCount;
+        return this.columns = xCount;
     }
 
     public drawSelection() {
         let steps:any = this.ksfinfo.steps;
         this.selector.clear();
-        this.selector.beginFill(0xFF700B, 0.3);
-        var x = this.index2Coord[this.selectedIndex].x + this.arrowSize;
-        var y = this.index2Coord[this.selectedIndex].y;
-        this.selector.drawRect(x, y, this.arrowSize * 10, this.arrowSize);
-        this.selector.endFill(); 
+        this.selector.beginFill(0xaacbff, 1); 
+        var begin, end;
+        if(this.selBegin <= this.selEnd) {
+            begin = this.selBegin;
+            end = this.selEnd;
+        }
+        else{
+            begin = this.selEnd;
+            end = this.selBegin;
+        }
+        for(let i=begin; i<=end; i++){
+            var x = this.index2Coord[i].x + this.arrowSize;
+            var y = this.index2Coord[i].y;
+            this.selector.drawRect(x, y, this.arrowSize * 10, this.arrowSize);
+        }
+
+        this.selector.endFill();
     }
 
     public loadKSF(ksfinfo : KSFInfo) {
@@ -258,6 +406,9 @@ class KSFView {
         this.redraw(); 
         this.drawSelection(); 
     }
-
+    public setKSF(ksfinfo : KSFInfo) {
+        this.ksfinfo = ksfinfo; 
+        this.selBegin = 0;
+    } 
 }
 

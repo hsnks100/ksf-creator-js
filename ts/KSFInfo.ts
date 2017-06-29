@@ -1,9 +1,17 @@
+/// <reference path="./KSFView.ts"/>
+
+
 /*
  *
  *
  * 전체의 큰 구조는 KSFInfo 
  */
 
+
+
+// var gg = require('./KSFView');
+// console.log(gg);
+import { Observer } from "./KSFView";
 interface KSFData {
      attach(observer:Observer);
      detach(observer:Observer);
@@ -17,7 +25,7 @@ class StepData {
         this.unitCOP = [];
     }
 }
-class KSFInfo implements KSFData{
+export class KSFInfo implements KSFData{
     public attach(observer:Observer) {
         this.observers.push(observer);
     }
@@ -95,7 +103,7 @@ class KSFInfo implements KSFData{
 
 
 
-        console.log("first steps length = ", this.steps.length);
+        // console.log("first steps length = ", this.steps.length);
         // expression = TEXT("^#STEP:([.\\n]+)");
         var stringStep = (data.match(/#STEP:([\S\s]+)/) || [,""])[1]; 
         stringStep = stringStep.trim();

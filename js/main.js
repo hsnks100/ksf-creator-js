@@ -1,9 +1,9 @@
-var electron = require('electron');
-var app = electron.app;
-var BrowserWindow = electron.BrowserWindow;
-var path = require('path');
-var url = require('url');
-var mainWindow;
+const electron = require('electron');
+const app = electron.app;
+const BrowserWindow = electron.BrowserWindow;
+const path = require('path');
+const url = require('url');
+let mainWindow;
 function createWindow() {
     mainWindow = new BrowserWindow({ width: 300, height: 300 });
     mainWindow.loadURL(url.format({

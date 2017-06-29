@@ -1,11 +1,27 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts"/> 
-/// <reference path="KSFInfo.ts"/>
+
+// var $, jQuery;
+// // $ = jQuery = require('jquery');
+// $ = jQuery = require('jquery-ui');
+//
+
+// var $ = require('jquery'); 
+// // load everything
+// require('jquery-ui'); 
 
 var $, jQuery;
 $ = jQuery = require('jquery');
+require('jquery-ui');
 
 
-interface Observer { 
+// import 'jquery-ui';
+
+
+
+// var KSFInfo = require('./KSFInfo').KSFInfo;
+import { KSFInfo } from "./KSFInfo";
+
+export interface Observer { 
      reflectData(); 
 } 
 
@@ -23,7 +39,9 @@ class Arrow extends Phaser.Sprite {
     public update() { 
     }
 } 
-class KSFView implements Observer{
+
+
+export class KSFView implements Observer{
     game:Phaser.Game;
     arrowSize:number = 16;
     ksfinfo:KSFInfo = null;
@@ -52,7 +70,7 @@ class KSFView implements Observer{
     }
 
     constructor() {
-        this.game = new Phaser.Game(800, 600, Phaser.AUTO, 
+        this.game = new Phaser.Game(800, 1000, Phaser.AUTO, 
             'ksf-view', 
             { preload: this.preload, create:this.create,
                 update:this.update });
@@ -85,133 +103,153 @@ class KSFView implements Observer{
     }
 
     public keyUp = (e) => {
+        e.preventDefault();
         var ksfViewDom = $('#ksf-view')[0];
         var maxScrollLeft = ksfViewDom.scrollWidth - ksfViewDom.clientWidth;
-
-        if(e.key == "ArrowDown") {
-            var changeIndex;
-            if(e.shiftKey == true) {
-                changeIndex = this.selEnd;
-            }
-            else{
-                changeIndex = this.selBegin;
-            }
-            changeIndex++;
-
-            if(e.shiftKey == true) {
-                this.selEnd = changeIndex;
-            }
-            else{
-                this.selBegin = changeIndex;
-                this.selEnd = this.selBegin;
-            }
-            this.drawSelection();
-        }
-        if(e.key == "ArrowUp") {
-            var changeIndex;
-            if(e.shiftKey == true) {
-                changeIndex = this.selEnd;
-            }
-            else{
-                changeIndex = this.selBegin;
-            }
-            changeIndex--;
-
-            if(e.shiftKey == true) {
-                this.selEnd = changeIndex;
-            }
-            else{
-                this.selBegin = changeIndex;
-                this.selEnd = this.selBegin;
-            }
-            this.drawSelection();
-        }
-        if(e.key == "ArrowLeft") {
-            var changeIndex;
-            if(e.shiftKey == true) {
-                changeIndex = this.selEnd;
-            }
-            else{
-                changeIndex = this.selBegin;
-            }
-
-            var prevY = this.index2Coord[changeIndex].y;
-            var prevX = this.index2Coord[changeIndex].x;
-            var minDiffY = 9999999;
-            var goalIndex = changeIndex;
-
-            for(let i=changeIndex - 1; i>=0;i--) {
-                var diffY = Math.abs(this.index2Coord[i].y - prevY);
-                if(this.index2Coord[i].x != prevX){
-                    if(minDiffY > diffY) {
-                        minDiffY = diffY; 
-                        goalIndex = i;
-                    }
-                    else{ 
-                        break;
-                    } 
-                } 
-            }
-            if(e.shiftKey == true) {
-                this.selEnd = goalIndex;
-            }
-            else{
-                this.selBegin = goalIndex;
-                this.selEnd = this.selBegin;
-            }
-            this.drawSelection();
-        }
-        if(e.key == "ArrowRight") {
-            var changeIndex;
-            if(e.shiftKey == true) {
-                changeIndex = this.selEnd;
-            }
-            else{
-                changeIndex = this.selBegin;
-            }
-
-            var prevY = this.index2Coord[changeIndex].y;
-            var prevX = this.index2Coord[changeIndex].x;
-            var minDiffY = 9999999;
-            var goalIndex = changeIndex;
-
-            for(let i=changeIndex + 1; i<this.ksfinfo.steps.length; i++) {
-                var diffY = Math.abs(this.index2Coord[i].y - prevY);
-                if(this.index2Coord[i].x != prevX){
-                    if(minDiffY > diffY) {
-                        minDiffY = diffY; 
-                        goalIndex = i;
-                    }
-                    else{ 
-                        break;
-                    } 
-                } 
-            }
-            if(e.shiftKey == true) {
-                this.selEnd = goalIndex;
-            }
-            else{
-                this.selBegin = goalIndex;
-                this.selEnd = this.selBegin;
-            }
-            this.drawSelection();
-        } 
-        // console.log(this.selEnd, "..", this.index2Column[this.selEnd], "/", this.columns);
+        var tid = null;
         console.log(e);
-        var prevScrollLeft = $('#ksf-view').scrollLeft();
-        while( this.index2Coord[this.selEnd].x + this.arrowSize * 11 > prevScrollLeft + ksfViewDom.clientWidth ) {
-            $('#ksf-view').scrollLeft($('#ksf-view').scrollLeft() + 1);
-            prevScrollLeft = $('#ksf-view').scrollLeft(); 
+
+        if(e.key.includes("Arrow")){
+            if(e.key == "ArrowDown") {
+                var changeIndex;
+                if(e.shiftKey == true) {
+                    changeIndex = this.selEnd;
+                }
+                else{
+                    changeIndex = this.selBegin;
+                }
+                changeIndex++;
+
+                if(e.shiftKey == true) {
+                    this.selEnd = changeIndex;
+                }
+                else {
+                    this.selBegin = changeIndex;
+                    this.selEnd = this.selBegin;
+                }
+                this.drawSelection();
+            }
+            if(e.key == "ArrowUp") {
+                var changeIndex;
+                if(e.shiftKey == true) {
+                    changeIndex = this.selEnd;
+                }
+                else{
+                    changeIndex = this.selBegin;
+                }
+                changeIndex--;
+
+                if(e.shiftKey == true) {
+                    this.selEnd = changeIndex;
+                }
+                else{
+                    this.selBegin = changeIndex;
+                    this.selEnd = this.selBegin;
+                }
+                this.drawSelection();
+            }
+            if(e.key == "ArrowLeft") {
+                var changeIndex;
+                if(e.shiftKey == true) {
+                    changeIndex = this.selEnd;
+                }
+                else{
+                    changeIndex = this.selBegin;
+                }
+
+                var prevY = this.index2Coord[changeIndex].y;
+                var prevX = this.index2Coord[changeIndex].x;
+                var minDiffY = 9999999;
+                var goalIndex = changeIndex;
+
+                for(let i=changeIndex - 1; i>=0;i--) {
+                    var diffY = Math.abs(this.index2Coord[i].y - prevY);
+                    if(this.index2Coord[i].x != prevX){
+                        if(minDiffY > diffY) {
+                            minDiffY = diffY; 
+                            goalIndex = i;
+                        }
+                        else{ 
+                            break;
+                        } 
+                    } 
+                }
+                if(e.shiftKey == true) {
+                    this.selEnd = goalIndex;
+                }
+                else{
+                    this.selBegin = goalIndex;
+                    this.selEnd = this.selBegin;
+                }
+                this.drawSelection();
+            }
+            if(e.key == "ArrowRight") {
+                var changeIndex;
+                if(e.shiftKey == true) {
+                    changeIndex = this.selEnd;
+                }
+                else{
+                    changeIndex = this.selBegin;
+                }
+
+                var prevY = this.index2Coord[changeIndex].y;
+                var prevX = this.index2Coord[changeIndex].x;
+                var minDiffY = 9999999;
+                var goalIndex = changeIndex;
+
+                for(let i=changeIndex + 1; i<this.ksfinfo.steps.length; i++) {
+                    var diffY = Math.abs(this.index2Coord[i].y - prevY);
+                    if(this.index2Coord[i].x != prevX){
+                        if(minDiffY > diffY) {
+                            minDiffY = diffY; 
+                            goalIndex = i;
+                        }
+                        else{ 
+                            break;
+                        } 
+                    } 
+                }
+                if(e.shiftKey == true) {
+                    this.selEnd = goalIndex;
+                }
+                else{
+                    this.selBegin = goalIndex;
+                    this.selEnd = this.selBegin;
+                }
+                this.drawSelection();
+            } 
+            (() => {
+                var prevScrollLeft = $('#ksf-view').scrollLeft();
+                var goalScrollValue = prevScrollLeft;
+                while( this.index2Coord[this.selEnd].x + this.arrowSize * 11 > goalScrollValue + ksfViewDom.clientWidth ) {
+                    goalScrollValue++;
+                }
+                $('#ksf-view').scrollLeft(goalScrollValue); 
+            })();
+
+            (() => {
+                var prevScrollLeft = $('#ksf-view').scrollLeft();
+                var goalScrollValue = prevScrollLeft;
+                while( this.index2Coord[this.selEnd].x < goalScrollValue) {
+                    goalScrollValue--;
+                }
+                $('#ksf-view').scrollLeft(goalScrollValue);
+            })();
         }
 
-        prevScrollLeft = $('#ksf-view').scrollLeft();
-        while( this.index2Coord[this.selEnd].x < prevScrollLeft) {
-            $('#ksf-view').scrollLeft($('#ksf-view').scrollLeft() - 1);
-            prevScrollLeft = $('#ksf-view').scrollLeft();
-        } 
+        else if(e.code == "Space"){
+            // $('.ui.modal').modal('show');
+            $( function() {
+                $("#dialog").dialog();
+            } ); 
+        }
+
+
+
     }
 
     public redraw = () => {
+        this.game.scale.setGameSize(this.game.scale.width, $( window ).height() - 170);
         this.arrows.removeAll();
         this.lines.removeAll(); 
         this.cops.removeAll();
@@ -223,7 +261,6 @@ class KSFView implements Observer{
         // this.selector.blendMode = PIXI.blendModes.NORM;
         this.selections.add(this.selector);
         this.drawSelection();
-        this.game.scale.setGameSize(this.game.scale.width, $( window ).height() - 170);
         // this.selector.lineStyle(10, 0xFF0000, 0.8);
     }
 
@@ -275,7 +312,7 @@ class KSFView implements Observer{
         var numberOfEachRow = Math.floor(this.game.scale.height / this.arrowSize / 4);
         numberOfEachRow--;
         var lineCount = numberOfEachRow * xCount;
-        console.log(numberOfEachRow);
+        // console.log(numberOfEachRow);
 
         var x, y;
         x = 0;
@@ -303,17 +340,21 @@ class KSFView implements Observer{
         console.log(yMargin);
 
         let steps:any = this.ksfinfo.steps;
-        console.log("step length = ", steps.length);
+        // console.log("step length = ", steps.length);
 
         // 64 / n tick
 
+        var numberOfEachRow = Math.floor(this.game.scale.height / this.arrowSize / 4);
+        console.log(numberOfEachRow);
         for(let i=0; i<steps.length; i++) {
             let unitStep = steps[i].unitStep;
             if(i == steps.length - 1){
-                console.log(unitStep);
+                // console.log(unitStep);
             }
             let unitCOP = steps[i].unitCOP;
-            if(y + 4 * this.arrowSize >= this.game.scale.height - this.arrowSize) {
+
+            if(y >= (numberOfEachRow - 1) * this.arrowSize * 4) {
+                console.log("y = ", y);
                 // this.drawLine2(x, y);
                 // this.drawLine(x, y);
                 y = 0;
@@ -336,8 +377,8 @@ class KSFView implements Observer{
             }
             y += yMargin; 
         } 
-        console.log("x : ", x);
-        console.log(this.coord2index);
+        // console.log("x : ", x);
+        // console.log(this.coord2index);
         this.game.scale.setGameSize(x + this.arrowSize * 11, this.game.scale.height); 
         return this.columns = xCount;
     }

@@ -1,28 +1,29 @@
-var StepData = (function () {
-    function StepData() {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class StepData {
+    constructor() {
         this.unitCOP = [];
     }
-    return StepData;
-}());
-var KSFInfo = (function () {
-    function KSFInfo(name) {
+}
+class KSFInfo {
+    constructor(name) {
         this.observers = [];
         this.title = name;
         this.steps = [];
     }
-    KSFInfo.prototype.attach = function (observer) {
+    attach(observer) {
         this.observers.push(observer);
-    };
-    KSFInfo.prototype.detach = function (observer) {
-    };
-    KSFInfo.prototype.notifyObservers = function () {
-        for (var i = 0; i < this.observers.length; i++) {
+    }
+    detach(observer) {
+    }
+    notifyObservers() {
+        for (let i = 0; i < this.observers.length; i++) {
             this.observers[i].reflectData();
         }
-    };
-    KSFInfo.prototype.getCOP = function (cop, pattern) {
+    }
+    getCOP(cop, pattern) {
         var tick = null;
-        for (var i = 0; i < cop.length; i++) {
+        for (let i = 0; i < cop.length; i++) {
             var matchs = cop[i].match(pattern);
             if (matchs != null) {
                 tick = Number(matchs[1]);
@@ -32,16 +33,16 @@ var KSFInfo = (function () {
             return -1;
         else
             return tick;
-    };
-    KSFInfo.prototype.getTickCount = function (cop) {
+    }
+    getTickCount(cop) {
         return this.getCOP(cop, /\|T(.+)\|/);
-    };
-    KSFInfo.prototype.getBPM = function (cop) {
+    }
+    getBPM(cop) {
         return this.getCOP(cop, /\|B(.+)\|/);
-    };
-    KSFInfo.prototype.showData = function () {
-    };
-    KSFInfo.prototype.loadKSF = function (data) {
+    }
+    showData() {
+    }
+    loadKSF(data) {
         this.title = "temptitle";
         this.title = (data.match(/^#TITLE:(.*);/m) || [, ""])[1].trim();
         this.titleFile = (data.match(/^#TITLEFILE:(.*);/m) || [, ""])[1].trim();
@@ -52,11 +53,10 @@ var KSFInfo = (function () {
         this.songFile = (data.match(/^#SONGFILE:(.*);/m) || [, ""])[1].trim();
         this.discFile = (data.match(/^#DISCFILE:(.*);/m) || [, ""])[1].trim();
         this.difficulty = Number((data.match(/^#DIFFICULTY:(.*);/m) || [, ""])[1]);
-        console.log("first steps length = ", this.steps.length);
         var stringStep = (data.match(/#STEP:([\S\s]+)/) || [, ""])[1];
         stringStep = stringStep.trim();
         var eachSteps = stringStep.split('\n');
-        var context = 0;
+        let context = 0;
         for (var i = 0; i < eachSteps.length; i++) {
             var firstChar = eachSteps[i][0];
             if (firstChar == '|') {
@@ -85,6 +85,6 @@ var KSFInfo = (function () {
                 context = 2;
             }
         }
-    };
-    return KSFInfo;
-}());
+    }
+}
+exports.KSFInfo = KSFInfo;

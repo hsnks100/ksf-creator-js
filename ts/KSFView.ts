@@ -9,13 +9,49 @@
 // // load everything
 // require('jquery-ui'); 
 
-var $, jQuery;
-$ = jQuery = require('jquery');
-require('jquery-ui');
+// var $, jQuery;
+// $ = jQuery = require('jquery');
+// require('jquery-ui');
+
+// if (typeof module === 'object') {window.module = module; module = undefined;
+// require('jquery');
+// require('jquery-ui'); 
+// if (window.module) module = window.module;
 
 
+
+
+
+// import $ from 'jquery';
+// // typescript will not remove this as the point of this syntax is: import for mutations!
 // import 'jquery-ui';
 
+
+// window.$ = window.jQuery = require('jquery');
+// import * as $ from 'jquery';
+// import * as jQuery from 'jquery';
+// window.$ = window.jQuery = require('jquery');
+//
+// require('jquery-ui-dist/jquery-ui.js');
+
+// import * as jQueryUI from "jquery-ui";
+// var jQuery = $;
+// import 'jquery-ui';
+// import 'jquery-ui';
+
+// if (typeof module === 'object') {window.module = module; module = undefined;}
+
+// var $ = require('jquery');
+// require('jquery-ui-dist/jquery-ui.js');
+
+// import * as $ from 'jquery';
+// import 'jquery-ui-dist/jquery-ui.js';
+// if (window.module) module = window.module;
+
+// var $ = require('jquery'); 
+
+declare var $; 
+require('jquery-ui-dist/jquery-ui.js'); 
 
 
 // var KSFInfo = require('./KSFInfo').KSFInfo;
@@ -238,7 +274,9 @@ export class KSFView implements Observer{
         else if(e.code == "Space"){
             // $('.ui.modal').modal('show');
             $( function() {
+                console.log($('#dialog'));
                 $("#dialog").dialog();
+                // $("#dialog").dialog();
             } ); 
         }
 

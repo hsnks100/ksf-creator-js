@@ -1,8 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var $, jQuery;
-$ = jQuery = require('jquery');
-require('jquery-ui');
+require('jquery-ui-dist/jquery-ui.js');
 class Arrow extends Phaser.Sprite {
     constructor(game, arrow) {
         super(game, 0, 0, arrow);
@@ -173,6 +171,7 @@ class KSFView {
             }
             else if (e.code == "Space") {
                 $(function () {
+                    console.log($('#dialog'));
                     $("#dialog").dialog();
                 });
             }

@@ -10,6 +10,7 @@ var KSFInfo = require('./KSFInfo').KSFInfo;
 
 var $, jQuery;
 $ = jQuery = require('jquery');
+console.log($);
 // require('semantic-ui');
 
 
@@ -19,27 +20,28 @@ var ksfView = null;
 var game = null;
 
 const ksfinfo = require('electron').remote.require('./main') 
-$('#btn1').click(function(){
-    var data = ksfinfo.loadDataFromFile();
-    var ksf = new KSFInfo();
-    ksf.loadKSF(data);
-
-    ksf.attach(ksfView);
-    ksfView.setKSF(ksf);
-
-    ksf.notifyObservers();
-}); 
-
-$('#btn2').click(function(){
-    $('.ui.sidebar')
-        .sidebar('toggle') ;
-
-});
 
 window.onload = function(){
     var game = new KSFView();
     ksfView = game;
     window.addEventListener('keydown', ksfView.keyUp, true)
+    $('#btn1').text("aaaa");
+    $('#btn1').click(function(){
+        var data = ksfinfo.loadDataFromFile();
+        var ksf = new KSFInfo();
+        ksf.loadKSF(data);
+
+        ksf.attach(ksfView);
+        ksfView.setKSF(ksf);
+
+        ksf.notifyObservers();
+    }); 
+
+    $('#btn2').click(function(){
+        $('.ui.sidebar')
+            .sidebar('toggle') ;
+
+    });
     // $('.overlay.sidebar')
         // .sidebar({
             // overlay: true

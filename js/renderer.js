@@ -24,7 +24,6 @@ const ksfinfo = require('electron').remote.require('./main')
 window.onload = function(){
     var game = new KSFView();
     ksfView = game;
-    window.addEventListener('keydown', ksfView.keyUp, true)
     $('#btn1').text("aaaa");
     $('#btn1').click(function(){
         var data = ksfinfo.loadDataFromFile();

@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const COPEditor = require('electron').remote.require('./COPEditor');
+const main = require('electron').remote.require('./main');
 require('jquery-ui-dist/jquery-ui.js');
 class Arrow extends Phaser.Sprite {
     constructor(game, arrow) {
@@ -20,6 +22,7 @@ class KSFView {
         this.coord2index = {};
         this.selBegin = 0;
         this.selEnd = 0;
+        this.copState = false;
         this.preload = () => {
             this.game.load.image('1', 'img/1.png');
             this.game.load.image('3', 'img/3.png');
@@ -44,7 +47,6 @@ class KSFView {
             }
         };
         this.keyUp = (e) => {
-            e.preventDefault();
             var ksfViewDom = $('#ksf-view')[0];
             var maxScrollLeft = ksfViewDom.scrollWidth - ksfViewDom.clientWidth;
             var tid = null;
@@ -169,10 +171,40 @@ class KSFView {
                     $('#ksf-view').scrollLeft(goalScrollValue);
                 })();
             }
+            else if (e.code == "End") {
+                $('#dialog').modal({
+                    closable: false,
+                    onDeny: function () {
+                        window.alert('Wait not yet!');
+                        return false;
+                    },
+                    onApprove: function () {
+                        window.alert('Approved!');
+                    },
+                    onHidden: function () {
+                        window.alert('hidden!');
+                    }
+                }).modal('show');
+            }
             else if (e.code == "Space") {
-                $(function () {
+                $(() => {
                     console.log($('#dialog'));
-                    $("#dialog").dialog();
+                    var dialog = $("#dialog").dialog({
+                        modal: true,
+                        width: 300,
+                        height: 200,
+                        buttons: {
+                            "Create an account": function () {
+                            },
+                            Cancel: () => {
+                                dialog.dialog("close");
+                            }
+                        },
+                        close: () => {
+                            this.copState = false;
+                        },
+                    });
+                    this.copState = true;
                 });
             }
         };
@@ -229,6 +261,7 @@ class KSFView {
         };
         this.game = new Phaser.Game(800, 1000, Phaser.AUTO, 'ksf-view', { preload: this.preload, create: this.create,
             update: this.update });
+        window.addEventListener('keydown', this.keyUp, true);
     }
     reflectData() {
         $('#ksf-title').attr("value", this.ksfinfo.title);
@@ -317,6 +350,11 @@ class KSFView {
             this.selector.drawRect(x, y, this.arrowSize * 10, this.arrowSize);
         }
         this.selector.endFill();
+    }
+    loadKSF(ksfinfo) {
+        this.ksfinfo = ksfinfo;
+        this.redraw();
+        this.drawSelection();
     }
     setKSF(ksfinfo) {
         this.ksfinfo = ksfinfo;

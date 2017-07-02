@@ -1,8 +1,9 @@
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-const path = require('path');
-const url = require('url');
+let electron = require('electron');
+let app = electron.app;
+let BrowserWindow = electron.BrowserWindow;
+let path = require('path');
+let url = require('url');
+exports.mainWindow = null;
 let mainWindow;
 function createWindow() {
     mainWindow = new BrowserWindow({ width: 300, height: 300 });
@@ -16,6 +17,7 @@ function createWindow() {
     mainWindow.on('closed', function () {
         mainWindow = null;
     });
+    exports.mainWindow = mainWindow;
 }
 app.on('ready', createWindow);
 app.on('window-all-closed', function () {

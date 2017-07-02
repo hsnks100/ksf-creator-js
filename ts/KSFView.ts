@@ -1,57 +1,14 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts"/> 
 
-// var $, jQuery;
-// // $ = jQuery = require('jquery');
-// $ = jQuery = require('jquery-ui');
-//
 
-// var $ = require('jquery'); 
-// // load everything
-// require('jquery-ui'); 
-
-// var $, jQuery;
-// $ = jQuery = require('jquery');
-// require('jquery-ui');
-
-// if (typeof module === 'object') {window.module = module; module = undefined;
-// require('jquery');
-// require('jquery-ui'); 
-// if (window.module) module = window.module;
-
-
-
-
-
-// import $ from 'jquery';
-// // typescript will not remove this as the point of this syntax is: import for mutations!
-// import 'jquery-ui';
-
-
-// window.$ = window.jQuery = require('jquery');
-// import * as $ from 'jquery';
-// import * as jQuery from 'jquery';
-// window.$ = window.jQuery = require('jquery');
-//
-// require('jquery-ui-dist/jquery-ui.js');
-
-// import * as jQueryUI from "jquery-ui";
-// var jQuery = $;
-// import 'jquery-ui';
-// import 'jquery-ui';
-
-// if (typeof module === 'object') {window.module = module; module = undefined;}
-
-// var $ = require('jquery');
-// require('jquery-ui-dist/jquery-ui.js');
-
-// import * as $ from 'jquery';
-// import 'jquery-ui-dist/jquery-ui.js';
-// if (window.module) module = window.module;
-
-// var $ = require('jquery'); 
+const COPEditor = require('electron').remote.require('./COPEditor') 
+const main = require('electron').remote.require('./main') ;
 
 declare var $; 
 require('jquery-ui-dist/jquery-ui.js'); 
+
+// import COPEditor from "./COPEditor";
+// require('./COPEditor.ts');
 
 
 // var KSFInfo = require('./KSFInfo').KSFInfo;
@@ -91,6 +48,10 @@ export class KSFView implements Observer{
     lines:Phaser.Group;
     cops:Phaser.Group;
     selections:Phaser.Group; 
+    copState:boolean = false;
+
+
+
     public reflectData() {
         $('#ksf-title').attr("value", this.ksfinfo.title);
         $('#ksf-bpm').attr("value", this.ksfinfo.bpm1);
@@ -109,6 +70,7 @@ export class KSFView implements Observer{
             'ksf-view', 
             { preload: this.preload, create:this.create,
                 update:this.update });
+        window.addEventListener('keydown', this.keyUp, true);
 
     }
     public preload = () => {
@@ -136,8 +98,12 @@ export class KSFView implements Observer{
         }
     }
 
-    public keyUp = (e) => {
-        e.preventDefault();
+    public keyUp = (e) => { 
+
+        // if(this.copState) {
+            // return;
+        // }
+        // e.preventDefault();
         var ksfViewDom = $('#ksf-view')[0];
         var maxScrollLeft = ksfViewDom.scrollWidth - ksfViewDom.clientWidth;
         var tid = null;
@@ -270,12 +236,61 @@ export class KSFView implements Observer{
                 $('#ksf-view').scrollLeft(goalScrollValue);
             })();
         }
-
+        else if(e.code == "End") {
+            $('#dialog').modal({
+                closable  : false,
+                onDeny    : function(){
+                    window.alert('Wait not yet!');
+                    return false;
+                },
+                onApprove : function() {
+                    window.alert('Approved!');
+                },
+                onHidden : function() {
+                    window.alert('hidden!');
+                }
+            }).modal('show')
+                
+        } 
         else if(e.code == "Space"){
             // $('.ui.modal').modal('show');
-            $( function() {
+            //
+            // COPEditor(main.mainWindow);
+            // console.log("close modal");
+
+            // window.open("https://www.w3schools.com");
+            // COPEditor.createCOPEditor();
+            //
+            
+
+            $( () => {
+
                 console.log($('#dialog'));
-                $("#dialog").dialog();
+                var dialog = $("#dialog").dialog(
+                    {
+                        modal : true,
+                        width:300,
+                        height:200,
+                        buttons: {
+                            "Create an account": function() {
+                            },
+                            Cancel: () => {
+                                dialog.dialog( "close" );
+                                // this.copState = false;
+                            }
+                        },
+                        close: () => {
+
+                            this.copState = false;
+
+
+                            // form[ 0 ].reset();
+                            // allFields.removeClass( "ui-state-error" );
+                        }, 
+                    }
+                
+                );
+                this.copState = true;
                 // $("#dialog").dialog();
             } ); 
         }

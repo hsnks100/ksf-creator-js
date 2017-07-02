@@ -41,6 +41,18 @@ window.onload = function(){
             .sidebar('toggle') ;
 
     });
+    // $('#ksf-title').keydown(function(e) {
+        // e.stopPropagation();
+    // });
+    // $('#ksf-bpm').keydown(function(e) {
+        // e.stopPropagation();
+    // });
+    // $('#ksf-starttime').keydown(function(e) {
+        // e.stopPropagation();
+    // });
+    // $('#ksf-tickcount').keydown(function(e) {
+        // e.stopPropagation();
+    // });
     // $('.overlay.sidebar')
         // .sidebar({
             // overlay: true

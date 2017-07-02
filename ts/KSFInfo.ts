@@ -142,6 +142,9 @@ export class KSFInfo implements KSFData{
         } 
 
     } 
+    public setCOPwithIndex(i:number, cop:Array<string>) {
+        this.steps[i].unitCOP = cop;
+    }
 }
 
 

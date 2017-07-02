@@ -70,7 +70,9 @@ export class KSFView implements Observer{
             'ksf-view', 
             { preload: this.preload, create:this.create,
                 update:this.update });
-        window.addEventListener('keydown', this.keyUp, true);
+        // $('#ksf-view')[0].addEventListener('keydown', this.keyUp, true);
+        $('#main-view').keydown(this.keyUp); // ('keydown', this.keyUp, true);
+        // window.addEventListener('keydown', this.keyUp, true);
 
     }
     public preload = () => {
@@ -104,6 +106,7 @@ export class KSFView implements Observer{
             // return;
         // }
         // e.preventDefault();
+        // e.stopPropagation();
         var ksfViewDom = $('#ksf-view')[0];
         var maxScrollLeft = ksfViewDom.scrollWidth - ksfViewDom.clientWidth;
         var tid = null;
@@ -236,23 +239,10 @@ export class KSFView implements Observer{
                 $('#ksf-view').scrollLeft(goalScrollValue);
             })();
         }
-        else if(e.code == "End") {
-            $('#dialog').modal({
-                closable  : false,
-                onDeny    : function(){
-                    window.alert('Wait not yet!');
-                    return false;
-                },
-                onApprove : function() {
-                    window.alert('Approved!');
-                },
-                onHidden : function() {
-                    window.alert('hidden!');
-                }
-            }).modal('show')
+        else if(e.key == "End") {
                 
         } 
-        else if(e.code == "Space"){
+        else if(e.key == " "){
             // $('.ui.modal').modal('show');
             //
             // COPEditor(main.mainWindow);
@@ -262,37 +252,59 @@ export class KSFView implements Observer{
             // COPEditor.createCOPEditor();
             //
             
-
-            $( () => {
-
-                console.log($('#dialog'));
-                var dialog = $("#dialog").dialog(
-                    {
-                        modal : true,
-                        width:300,
-                        height:200,
-                        buttons: {
-                            "Create an account": function() {
-                            },
-                            Cancel: () => {
-                                dialog.dialog( "close" );
-                                // this.copState = false;
-                            }
-                        },
-                        close: () => {
-
-                            this.copState = false;
+            $('#dialog').modal({
+                closable  : true,
+                onApprove : () => {
+                    var t = $('#modal_cop').val();
+                    var arrayT = t.split('\n');
+                    console.log(arrayT);
+                    this.ksfinfo.setCOPwithIndex(this.selEnd, arrayT);
+                    console.log(this.ksfinfo.steps); 
 
 
-                            // form[ 0 ].reset();
-                            // allFields.removeClass( "ui-state-error" );
-                        }, 
-                    }
+                    // window.alert('Approved!');
+                    return false;
+                },
+                onHidden : function() {
+                    // window.alert('hidden!');
+                }, 
+            }).modal('show');
+            $('#dialog').keydown(function(e){ 
+                // e.preventDefault();
+                e.stopPropagation(); 
+                console.log(e);
+            });
+
+            // $( () => {
+
+                // console.log($('#dialog'));
+                // var dialog = $("#dialog").dialog(
+                    // {
+                        // modal : true,
+                        // width:300,
+                        // height:200,
+                        // buttons: {
+                            // "Create an account": function() {
+                            // },
+                            // Cancel: () => {
+                                // dialog.dialog( "close" );
+                                // // this.copState = false;
+                            // }
+                        // },
+                        // close: () => {
+
+                            // this.copState = false;
+
+
+                            // // form[ 0 ].reset();
+                            // // allFields.removeClass( "ui-state-error" );
+                        // }, 
+                    // }
                 
-                );
-                this.copState = true;
-                // $("#dialog").dialog();
-            } ); 
+                // );
+                // this.copState = true;
+                // // $("#dialog").dialog();
+            // } ); 
         }
 
 

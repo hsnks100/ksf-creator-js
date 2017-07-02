@@ -86,5 +86,8 @@ class KSFInfo {
             }
         }
     }
+    setCOPwithIndex(i, cop) {
+        this.steps[i].unitCOP = cop;
+    }
 }
 exports.KSFInfo = KSFInfo;

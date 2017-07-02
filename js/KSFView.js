@@ -171,40 +171,25 @@ class KSFView {
                     $('#ksf-view').scrollLeft(goalScrollValue);
                 })();
             }
-            else if (e.code == "End") {
+            else if (e.key == "End") {
+            }
+            else if (e.key == " ") {
                 $('#dialog').modal({
-                    closable: false,
-                    onDeny: function () {
-                        window.alert('Wait not yet!');
+                    closable: true,
+                    onApprove: () => {
+                        var t = $('#modal_cop').val();
+                        var arrayT = t.split('\n');
+                        console.log(arrayT);
+                        this.ksfinfo.setCOPwithIndex(this.selEnd, arrayT);
+                        console.log(this.ksfinfo.steps);
                         return false;
                     },
-                    onApprove: function () {
-                        window.alert('Approved!');
-                    },
                     onHidden: function () {
-                        window.alert('hidden!');
-                    }
+                    },
                 }).modal('show');
-            }
-            else if (e.code == "Space") {
-                $(() => {
-                    console.log($('#dialog'));
-                    var dialog = $("#dialog").dialog({
-                        modal: true,
-                        width: 300,
-                        height: 200,
-                        buttons: {
-                            "Create an account": function () {
-                            },
-                            Cancel: () => {
-                                dialog.dialog("close");
-                            }
-                        },
-                        close: () => {
-                            this.copState = false;
-                        },
-                    });
-                    this.copState = true;
+                $('#dialog').keydown(function (e) {
+                    e.stopPropagation();
+                    console.log(e);
                 });
             }
         };
@@ -261,7 +246,7 @@ class KSFView {
         };
         this.game = new Phaser.Game(800, 1000, Phaser.AUTO, 'ksf-view', { preload: this.preload, create: this.create,
             update: this.update });
-        window.addEventListener('keydown', this.keyUp, true);
+        $('#main-view').keydown(this.keyUp);
     }
     reflectData() {
         $('#ksf-title').attr("value", this.ksfinfo.title);

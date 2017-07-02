@@ -17,8 +17,8 @@
         <script src="semantic/dist/semantic.js"></script>
         <script> 
             require('./js/KSFView.js');
-            require('./js/KSFInfo.js');
-            require('./js/renderer.js'); 
+require('./js/KSFInfo.js');
+require('./js/renderer.js'); 
         </script>
 
         <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
@@ -27,65 +27,67 @@
             <!-- src="https://code.jquery.com/jquery-3.1.1.min.js" -->
 <!-- integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" -->
         <!-- crossorigin="anonymous"></script> -->
-    </head>
-<body>
-    <div class="ui menu">
-        <div class="ui container">
-            <div class="ui simple dropdown item">
-                File
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <div class="item" id="btn1"><i class="edit icon"></i>Open KSF</div>
-                    <div class="item" id="btn2"><i class="globe icon"></i> Choose Language</div>
-                    <div class="item"><i class="settings icon"></i> Account Settings</div>
+</head>
+<body id="main-view">
+    <div>
+        <div class="ui menu">
+            <div class="ui container">
+                <div class="ui simple dropdown item">
+                    File
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" id="btn1"><i class="edit icon"></i>Open KSF</div>
+                        <div class="item" id="btn2"><i class="globe icon"></i> Choose Language</div>
+                        <div class="item"><i class="settings icon"></i> Account Settings</div>
+                    </div>
                 </div>
-            </div>
-            <div class="ui simple dropdown item">
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <div class="item" id=""><i class="edit icon"></i>Open KSF2</div>
-                    <div class="item" id=""><i class="globe icon"></i> Choose Language2</div>
-                    <div class="item"><i class="settings icon"></i> Account Settings2</div>
+                <div class="ui simple dropdown item">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" id=""><i class="edit icon"></i>Open KSF2</div>
+                        <div class="item" id=""><i class="globe icon"></i> Choose Language2</div>
+                        <div class="item"><i class="settings icon"></i> Account Settings2</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="ui grid stackable">
-        <div class="row">
-            <div class="ui menu  stackable ">
-                <div class="ui input item ksfheader">
-                    <input type="text" placeholder="TITLE" id="ksf-title">
-                </div>
-                <div class="ui input item ksfheader">
-                    <input type="text" placeholder="BPM" id="ksf-bpm">
-                </div>
-                <div class="ui input item ksfheader">
-                    <input type="text" placeholder="STARTTIME" id="ksf-starttime">
-                </div>
-                <div class="ui input item ksfheader">
-                    <input type="text" placeholder="TICK" id="ksf-tickcount">
+        <div class="ui grid stackable">
+            <div class="row">
+                <div class="ui menu  stackable ">
+                    <div class="ui input item ksfheader">
+                        <input type="text" placeholder="TITLE" id="ksf-title">
+                    </div>
+                    <div class="ui input item ksfheader">
+                        <input type="text" placeholder="BPM" id="ksf-bpm">
+                    </div>
+                    <div class="ui input item ksfheader">
+                        <input type="text" placeholder="STARTTIME" id="ksf-starttime">
+                    </div>
+                    <div class="ui input item ksfheader">
+                        <input type="text" placeholder="TICK" id="ksf-tickcount">
+                    </div>
                 </div>
             </div>
+            <div class="row" tabIndex="-1">
+                <div class="ksf-view  menu ui" id="ksf-view"></div> 
+            </div>
         </div>
-        <div class="row">
-            <div class="ksf-view  menu ui" id="ksf-view"></div> 
-        </div>
-    </div>
 
-    <div id="dialog" title="Basic dialog" class="ui modal">
-        <h1>변속정보 |Bxxx|, |T(1,2,4,8,...)|, |E4| 등을 쓰는 곳입니다.</h1>
-        <form class="ui form">
-            <div class="field">
-                <textarea rows="4" placeholder="변속정보"></textarea> 
-            </div>
-        </form>
-        <div class="actions">
-            <div class="ui close button">Close</div>
-        </div>
     </div>
 
 
 </body>
+<div id="dialog" title="Basic dialog" class="ui modal">
+    <h1>변속정보 |Bxxx|, |T(1,2,4,8,...)|, |E4| 등을 쓰는 곳입니다.</h1>
+    <form class="ui form">
+        <div class="field">
+            <textarea rows="4" placeholder="|B120|\n|T4|\n..." id="modal_cop"></textarea> 
+        </div>
+    </form>
+    <div class="actions">
+        <div class="ui approve button" id="modal_done">Done</div>
+    </div>
+</div>
 
 </html>

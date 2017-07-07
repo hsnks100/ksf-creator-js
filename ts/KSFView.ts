@@ -1,6 +1,11 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts"/> 
 
 
+
+
+
+
+
 const COPEditor = require('electron').remote.require('./COPEditor') 
 const main = require('electron').remote.require('./main') ;
 

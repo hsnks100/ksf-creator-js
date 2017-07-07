@@ -94,7 +94,6 @@ class StepData {
         else {
             stepBuffer.charAt(index, "1");
         } 
-
         this.unitStep = stepBuffer.toString();
     }
     public getIndexWith(unit:string) {

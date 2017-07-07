@@ -243,31 +243,26 @@ export class KSFView implements Observer{
                 
         } 
         else if(e.key == " "){
-            // $('.ui.modal').modal('show');
-            //
-            // COPEditor(main.mainWindow);
-            // console.log("close modal");
-
-            // window.open("https://www.w3schools.com");
-            // COPEditor.createCOPEditor();
-            //
             
             $('#dialog').modal({
                 closable  : true,
                 onApprove : () => {
                     var t = $('#modal_cop').val();
                     var arrayT = t.split('\n');
-                    console.log(arrayT);
+                    if(t == "") {
+                        arrayT = [];
+                    }
                     this.ksfinfo.setCOPwithIndex(this.selEnd, arrayT);
-                    console.log(this.ksfinfo.steps); 
-
-
+                    this.redraw(); 
                     // window.alert('Approved!');
                     return false;
                 },
                 onHidden : function() {
                     // window.alert('hidden!');
                 }, 
+                onShow : () => {
+                    $('#modal_cop').val( this.ksfinfo.steps[this.selEnd].getCOP() );
+                },
             }).modal('show');
             $('#dialog').keydown(function(e){ 
                 // e.preventDefault();
@@ -305,6 +300,12 @@ export class KSFView implements Observer{
                 // this.copState = true;
                 // // $("#dialog").dialog();
             // } ); 
+        }
+        else if("zscqwevgnry".includes(e.key)) { 
+            this.ksfinfo.setStep(this.selEnd, e.key);
+
+            this.redraw();
+
         }
 
 
@@ -475,5 +476,9 @@ export class KSFView implements Observer{
         this.ksfinfo = ksfinfo; 
         this.selBegin = 0;
     } 
+    public saveAsFile(filename:string) { 
+        console.log(this.ksfinfo.steps);
+        this.ksfinfo.saveAsFile(filename);
+    }
 }
 

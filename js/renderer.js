@@ -36,9 +36,10 @@ window.onload = function(){
         ksf.notifyObservers();
     }); 
 
-    $('#btn2').click(function(){
-        $('.ui.sidebar')
-            .sidebar('toggle') ;
+    $('#btn2').click( () => {
+        ksfView.saveAsFile('./test.txt', 'asdasd');
+        // $('.ui.sidebar')
+            // .sidebar('toggle') ;
 
     });
     // $('#ksf-title').keydown(function(e) {

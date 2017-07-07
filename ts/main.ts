@@ -75,6 +75,11 @@ exports.loadDataFromFile = function() {
     return fs.readFileSync('sample.ksf', 'utf8'); 
 }
 
+exports.saveAsFile = (filename:String, data:String) => {
+    var fs = require('fs'); 
+    return fs.writeFileSync(filename, data, 'utf8'); 
+}
+
 
 
 

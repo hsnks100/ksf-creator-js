@@ -1,8 +1,74 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var StringBuffer = function () {
+    this.buffer = new Array();
+};
+StringBuffer.prototype.append = function (str) {
+    var t = str.split('');
+    console.log(t);
+    console.log(this.buffer);
+    var startIndex = this.buffer.length;
+    for (var i = startIndex; i < startIndex + t.length; i++) {
+        console.log(i);
+        this.buffer[i] = str[i - startIndex];
+    }
+};
+StringBuffer.prototype.toString = function () {
+    return this.buffer.join("");
+};
+StringBuffer.prototype.charAt = function (i, char) {
+    if (arguments.length == 1) {
+        return this.buffer[i];
+    }
+    else {
+        this.buffer[i] = char;
+    }
+};
+const main = require('electron').remote.require('./main');
 class StepData {
     constructor() {
         this.unitCOP = [];
+    }
+    getString() {
+        let output = "";
+        for (let i = 0; i < this.unitCOP.length; i++) {
+            output += this.unitCOP[i] + "\n";
+        }
+        output += this.unitStep + "\n";
+        return output;
+    }
+    getCOP() {
+        let output = "";
+        for (let i = 0; i < this.unitCOP.length; i++) {
+            output += this.unitCOP[i] + "\n";
+        }
+        return output;
+    }
+    setStep(step) {
+        var stepBuffer = new StringBuffer();
+        stepBuffer.append(this.unitStep);
+        var index = this.getIndexWith(step);
+        if (stepBuffer.charAt(index) == '1') {
+            stepBuffer.charAt(index, "0");
+        }
+        else {
+            stepBuffer.charAt(index, "1");
+        }
+        this.unitStep = stepBuffer.toString();
+    }
+    getIndexWith(unit) {
+        var dict = {};
+        dict["z"] = 0;
+        dict["q"] = 1;
+        dict["s"] = 2;
+        dict["e"] = 3;
+        dict["c"] = 4;
+        dict["v"] = 5;
+        dict["r"] = 6;
+        dict["g"] = 7;
+        dict["y"] = 8;
+        dict["n"] = 9;
+        return dict[unit];
     }
 }
 class KSFInfo {
@@ -88,6 +154,26 @@ class KSFInfo {
     }
     setCOPwithIndex(i, cop) {
         this.steps[i].unitCOP = cop;
+    }
+    saveAsFile(filename) {
+        let output = "";
+        output = output + "#TITLE:" + this.title + ";\n";
+        output += "#TITLEFILE:" + this.titleFile + ";\n";
+        output += "#TICKCOUNT:" + this.tickCount + ";\n";
+        output += "#BPM:" + this.bpm1 + ";\n";
+        output += "#STARTTIME:" + this.startTime + ";\n";
+        output += "#INTROFILE:" + this.introFile + ";\n";
+        output += "#SONGFILE:" + this.songFile + ";\n";
+        output += "#DISCFILE:" + this.discFile + ";\n";
+        output += "#DIFFICULTY:" + this.difficulty + ";\n";
+        output += "#STEP:\n";
+        for (let i = 0; i < this.steps.length; i++) {
+            output += this.steps[i].getString();
+        }
+        main.saveAsFile(filename, output);
+    }
+    setStep(i, step) {
+        this.steps[i].setStep(step);
     }
 }
 exports.KSFInfo = KSFInfo;

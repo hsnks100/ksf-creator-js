@@ -179,18 +179,27 @@ class KSFView {
                     onApprove: () => {
                         var t = $('#modal_cop').val();
                         var arrayT = t.split('\n');
-                        console.log(arrayT);
+                        if (t == "") {
+                            arrayT = [];
+                        }
                         this.ksfinfo.setCOPwithIndex(this.selEnd, arrayT);
-                        console.log(this.ksfinfo.steps);
+                        this.redraw();
                         return false;
                     },
                     onHidden: function () {
+                    },
+                    onShow: () => {
+                        $('#modal_cop').val(this.ksfinfo.steps[this.selEnd].getCOP());
                     },
                 }).modal('show');
                 $('#dialog').keydown(function (e) {
                     e.stopPropagation();
                     console.log(e);
                 });
+            }
+            else if ("zscqwevgnry".includes(e.key)) {
+                this.ksfinfo.setStep(this.selEnd, e.key);
+                this.redraw();
             }
         };
         this.redraw = () => {
@@ -344,6 +353,10 @@ class KSFView {
     setKSF(ksfinfo) {
         this.ksfinfo = ksfinfo;
         this.selBegin = 0;
+    }
+    saveAsFile(filename) {
+        console.log(this.ksfinfo.steps);
+        this.ksfinfo.saveAsFile(filename);
     }
 }
 exports.KSFView = KSFView;

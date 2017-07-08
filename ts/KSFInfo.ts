@@ -13,9 +13,9 @@
 // console.log(gg);
 import { Observer } from "./KSFView";
 interface KSFData {
-     attach(observer:Observer);
-     detach(observer:Observer);
-     notifyObservers();
+    attach(observer:Observer);
+    detach(observer:Observer);
+    notifyObservers();
 }
 
 class StepData {

@@ -2,10 +2,6 @@
 
 
 
-
-
-
-
 const COPEditor = require('electron').remote.require('./COPEditor') 
 const main = require('electron').remote.require('./main') ;
 
@@ -403,7 +399,7 @@ export class KSFView implements Observer{
         var y = 0;
         var x = 0;
         var tickCount = this.ksfinfo.tickCount;
-        var yMargin = 64.0 / tickCount;
+        var yMargin = 32.0 / tickCount;
         console.log(yMargin);
 
         let steps:any = this.ksfinfo.steps;

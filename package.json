@@ -4,7 +4,8 @@
   "description": "A minimal Electron application",
   "main": "js/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .", 
+    "reload": "live-reload app --port 35729"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -17,14 +18,20 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "@types/node": "^8.0.1",
-    "electron": "^1.6.11",
+    "@types/node": "^8.0.7",
+    "electron": "1.6.11",
+    "electron-connect": "^0.6.1",
     "electron-inspector": "^0.1.4",
-    "electron-rebuild": "^1.2.1"
+    "electron-rebuild": "^1.2.1",
+    "gulp-livereload": "^3.8.1",
+    "live-reload": "^1.1.0",
+    "typings": "^2.1.1"
   },
   "dependencies": {
+    "@types/electron": "^1.6.10",
     "better-console": "^1.0.0",
     "del": "^3.0.0",
+    "electron": "^1.6.11",
     "extend": "^3.0.1",
     "jquery": "^3.2.1",
     "jquery-ui-dist": "^1.12.1",
@@ -34,5 +41,5 @@
     "run-sequence": "^1.2.2",
     "semantic-ui": "^2.2.10",
     "yamljs": "^0.3.0"
-  }
+  } 
 }

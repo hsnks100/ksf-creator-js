@@ -10,7 +10,7 @@
         "rootDir": "./ts/",
         "outDir": "./js/",
         "emitDecoratorMetadata": true,
-        "experimentalDecorators": true 
+        "experimentalDecorators": true
     },
     "exclude": [
         "node_modules"

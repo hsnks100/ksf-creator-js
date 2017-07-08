@@ -17,13 +17,18 @@ A basic Electron application needs just these files:
 
 To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
+
 ```bash
+sudo apt install npm
+sudo npm install -g typescript typings
+
 # Clone this repository
 # git clone this repository. 
 # Go into the repository
 cd ksf-creator-js
 # Install dependencies
 npm install
+
 # Run the app
 npm start
 ```

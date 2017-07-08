@@ -283,7 +283,7 @@ class KSFView {
         var y = 0;
         var x = 0;
         var tickCount = this.ksfinfo.tickCount;
-        var yMargin = 64.0 / tickCount;
+        var yMargin = 32.0 / tickCount;
         console.log(yMargin);
         let steps = this.ksfinfo.steps;
         var numberOfEachRow = Math.floor(this.game.scale.height / this.arrowSize / 4);

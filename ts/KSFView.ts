@@ -50,6 +50,7 @@ export class KSFView implements Observer{
     cops:Phaser.Group;
     selections:Phaser.Group; 
     copState:boolean = false;
+    scale:number = 1;
 
 
 
@@ -66,10 +67,15 @@ export class KSFView implements Observer{
         // get current position = cur / total
     }
 
-    constructor() {
+    constructor(callback) {
         this.game = new Phaser.Game(800, 1000, Phaser.AUTO, 
             'ksf-view', 
-            { preload: this.preload, create:this.create,
+            { preload: this.preload, 
+                create:() => {
+                    this.create();
+                    callback(); 
+                },
+                
                 update:this.update });
         // $('#ksf-view')[0].addEventListener('keydown', this.keyUp, true);
         $('#main-view').keydown(this.keyUp); // ('keydown', this.keyUp, true);
@@ -123,6 +129,7 @@ export class KSFView implements Observer{
                     changeIndex = this.selBegin;
                 }
                 changeIndex++;
+                changeIndex = Math.min(this.ksfinfo.steps.length - 1, changeIndex);
 
                 if(e.shiftKey == true) {
                     this.selEnd = changeIndex;
@@ -142,6 +149,7 @@ export class KSFView implements Observer{
                     changeIndex = this.selBegin;
                 }
                 changeIndex--;
+                changeIndex = Math.max(0, changeIndex);
 
                 if(e.shiftKey == true) {
                     this.selEnd = changeIndex;
@@ -302,15 +310,37 @@ export class KSFView implements Observer{
                 // // $("#dialog").dialog();
             // } ); 
         }
-        else if("zscqwevgnry".includes(e.key)) { 
+        else if(e.ctrlKey == false && "zscqwevgnry".includes(e.key)) { 
             this.ksfinfo.setStep(this.selEnd, e.key);
 
-            this.redraw();
+            this.redraw(); 
+        }
+        
+        else if(e.ctrlKey == true && e.key == "c") {
+            this.copyStep(this.selBegin, this.selEnd);
 
         }
+        else if(e.ctrlKey == true && e.key == "v") {
+            this.pasteStep();
+            this.redraw();
+            //this.copyStep(this.selBegin, this.selEnd); 
+        }
 
+        else if(e.key == "Insert") {
+            if(e.ctrlKey == true) {
+                this.ksfinfo.pushBack();
+            }
+            else{
+                this.ksfinfo.insert(this.selEnd);
+            }
 
+            this.redraw();
+        } 
 
+        else if(e.key == "Delete") {
+            this.ksfinfo.deleteStep(this.selEnd);
+            this.redraw();
+        } 
     }
 
     public redraw = () => {
@@ -394,13 +424,16 @@ export class KSFView implements Observer{
                 x += this.arrowSize * 11;
             }
         }
+        this.drawLine((xCount - 1) * this.arrowSize * 11, 
+            this.index2Coord[this.ksfinfo.steps.length - 1].y + this.arrowSize, 0x000000);
     }
     public drawKSF() { 
         var xCount = 1;
+        var computeScale = 64 * this.scale;
         var y = 0;
         var x = 0;
         var tickCount = this.ksfinfo.tickCount;
-        var yMargin = 32.0 / tickCount;
+        var yMargin = computeScale / tickCount;
         console.log(yMargin);
 
         let steps:any = this.ksfinfo.steps;
@@ -435,7 +468,7 @@ export class KSFView implements Observer{
 
             let newTick = this.ksfinfo.getTickCount(unitCOP);
             if(newTick != -1){
-                yMargin = 64.0 / newTick;
+                yMargin = computeScale / newTick;
                 tickCount = newTick;
             }
             y += yMargin; 
@@ -480,6 +513,56 @@ export class KSFView implements Observer{
     public saveAsFile(filename:string) { 
         console.log(this.ksfinfo.steps);
         this.ksfinfo.saveAsFile(filename);
+    }
+
+
+    public pushBack() {
+        this.ksfinfo.pushBack();
+    }
+
+    public insert(pos:number) {
+        this.ksfinfo.insert(pos);
+    }
+
+    public deleteStep(pos:number) {
+        this.ksfinfo.deleteStep(pos);
+    }
+
+    public getTextFromRange(b:number, e:number) {
+        if(b > e) {
+            let temp = e;
+            e = b;
+            b = temp;
+        }
+        let ret:string = "";
+
+        for(let i=b; i<=e; i++) {
+            ret += this.ksfinfo.steps[i].getString();
+        }
+
+        return ret;
+    }
+    public copyStep(b:number, e:number) {
+        const {clipboard} = require('electron');
+        if(b > e) {
+            let temp = e;
+            e = b;
+            b = temp;
+        }
+        clipboard.writeText(this.getTextFromRange(b, e));
+    }
+
+    public pasteStep() {
+        const {clipboard} = require('electron');
+        let stepsString = clipboard.readText();
+        this.ksfinfo.insertSteps(this.selEnd,
+            this.ksfinfo.getStepsFromString(stepsString));
+
+    }
+
+    public setScale(s:number) {
+        this.scale = s;
+        this.redraw();
     }
 }
 

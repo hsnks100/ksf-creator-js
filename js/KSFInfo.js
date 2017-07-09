@@ -28,6 +28,7 @@ const main = require('electron').remote.require('./main');
 class StepData {
     constructor() {
         this.unitCOP = [];
+        this.unitStep = "0000000000000";
     }
     getString() {
         let output = "";
@@ -76,6 +77,12 @@ class KSFInfo {
         this.observers = [];
         this.title = name;
         this.steps = [];
+        this.steps.push(new StepData());
+        this.title = "new title";
+        this.player = "double";
+        this.bpm1 = 120;
+        this.startTime = 0;
+        this.tickCount = 4;
     }
     attach(observer) {
         this.observers.push(observer);
@@ -121,36 +128,7 @@ class KSFInfo {
         this.difficulty = Number((data.match(/^#DIFFICULTY:(.*);/m) || [, ""])[1]);
         var stringStep = (data.match(/#STEP:([\S\s]+)/) || [, ""])[1];
         stringStep = stringStep.trim();
-        var eachSteps = stringStep.split('\n');
-        let context = 0;
-        for (var i = 0; i < eachSteps.length; i++) {
-            var firstChar = eachSteps[i][0];
-            if (firstChar == '|') {
-                if (context != 1) {
-                    var stepdata = new StepData();
-                    stepdata.unitStep = "";
-                    stepdata.unitCOP = [];
-                    this.steps.push(stepdata);
-                }
-                var lastIndex = this.steps.length - 1;
-                this.steps[lastIndex].unitCOP.push(eachSteps[i]);
-                context = 1;
-            }
-            else if (firstChar == '2') {
-            }
-            else {
-                if (context != 1) {
-                    var stepdata = new StepData();
-                    stepdata.unitStep = eachSteps[i];
-                    stepdata.unitCOP = [];
-                    this.steps.push(stepdata);
-                }
-                else {
-                    this.steps[this.steps.length - 1].unitStep = eachSteps[i];
-                }
-                context = 2;
-            }
-        }
+        this.steps = this.getStepsFromString(stringStep);
     }
     setCOPwithIndex(i, cop) {
         this.steps[i].unitCOP = cop;
@@ -174,6 +152,57 @@ class KSFInfo {
     }
     setStep(i, step) {
         this.steps[i].setStep(step);
+    }
+    pushBack() {
+        this.steps.push(new StepData());
+    }
+    insert(pos) {
+        this.steps.splice(pos, 0, new StepData());
+    }
+    deleteStep(pos) {
+        console.log(this.steps);
+        this.steps.splice(pos, 1);
+        console.log(this.steps);
+    }
+    getStepsFromString(steps) {
+        let localSteps = [];
+        var eachSteps = steps.split('\n');
+        let context = 0;
+        for (var i = 0; i < eachSteps.length; i++) {
+            var firstChar = eachSteps[i][0];
+            if (firstChar == '|') {
+                if (context != 1) {
+                    var stepdata = new StepData();
+                    stepdata.unitStep = "";
+                    stepdata.unitCOP = [];
+                    localSteps.push(stepdata);
+                }
+                var lastIndex = localSteps.length - 1;
+                localSteps[lastIndex].unitCOP.push(eachSteps[i]);
+                context = 1;
+            }
+            else if (firstChar == '2') {
+            }
+            else {
+                if (context != 1) {
+                    var stepdata = new StepData();
+                    stepdata.unitStep = eachSteps[i];
+                    stepdata.unitCOP = [];
+                    localSteps.push(stepdata);
+                }
+                else {
+                    localSteps[localSteps.length - 1].unitStep = eachSteps[i];
+                }
+                context = 2;
+            }
+        }
+        return localSteps;
+    }
+    insertSteps(pos, steps) {
+        let insertIndex = pos;
+        for (let i = 0; i < steps.length; i++) {
+            this.steps.splice(insertIndex++, 0, steps[i]);
+        }
     }
 }
 exports.KSFInfo = KSFInfo;

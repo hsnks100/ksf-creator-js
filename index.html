@@ -31,17 +31,47 @@ require('./js/renderer.js');
                     File
                     <i class="dropdown icon"></i>
                     <div class="menu">
-                        <div class="item" id="btn1"><i class="edit icon"></i>Open KSF</div>
-                        <div class="item" id="btn2"><i class="globe icon"></i>Save KSF</div>
-                        <div class="item"><i class="settings icon"></i> Account Settings</div>
+                        <div class="item" id="newksf"><i class="file icon"></i>New KSF</div>
+                        <div class="item" id="openksf"><i class="edit icon"></i>Open KSF</div>
+                        <div class="item" id="saveksf"><i class="save icon"></i>Save KSF</div>
                     </div>
                 </div>
                 <div class="ui simple dropdown item">
+                    Edit
                     <i class="dropdown icon"></i>
                     <div class="menu">
-                        <div class="item" id=""><i class="edit icon"></i>Open KSF2</div>
-                        <div class="item" id=""><i class="globe icon"></i> Choose Language2</div>
-                        <div class="item"><i class="settings icon"></i> Account Settings2</div>
+                        <div class="item" id=""><i class="minus icon"></i>insert</div>
+                        <div class="item" id=""><i class="minus icon"></i>push back</div>
+                        <div class="item" id=""><i class="remove circle icon"></i>delete step</div>
+                        <div class="item" id=""><i class="toggle up icon"></i>rotate step</div>
+                        <div class="item" id=""><i class="sort icon"></i>set margin</div>
+                        <div class="item" id=""><i class="code icon"></i>edit bpm</div>
+                        <div class="item" id=""><i class="cut icon"></i>cut step</div>
+                        <div class="item" id=""><i class="copy icon"></i>copy step</div>
+                        <div class="item" id=""><i class="paste icon"></i>paste step</div>
+                    </div>
+                </div>
+                <div class="ui simple dropdown item">
+                    View
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" id=""><i class="newspaper icon"></i>Single</div>
+                        <div class="item" id=""><i class="newspaper icon"></i>Double</div>
+                        <div class="item" id="x1"><i class="zoom icon"></i>X1</div>
+                        <div class="item" id="x2"><i class="zoom icon"></i>X2</div>
+                        <div class="item" id="x4"><i class="zoom icon"></i>X4</div>
+                        <div class="item" id="x6"><i class="zoom icon"></i>X6</div>
+                        <div class="item" id="x8"><i class="zoom icon"></i>X8</div>
+                    </div>
+                </div>
+                <div class="ui simple dropdown item">
+                    Player
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" id=""><i class="play icon"></i>Resume</div>
+                        <div class="item" id=""><i class="play icon"></i>Play</div>
+                        <div class="item" id=""><i class="stop icon"></i>STOP</div>
+                        <div class="item" id=""><i class="save icon"></i>KSF to PIC</div>
                     </div>
                 </div>
             </div>
@@ -74,7 +104,7 @@ require('./js/renderer.js');
 
 </body>
 <div id="dialog" title="Basic dialog" class="ui modal">
-    <h1>변속정보 |Bxxx|, |T(1,2,4,8,...)|, |E4| 등을 쓰는 곳입니다.</h1>
+    <h1>변속정보 |Bxxx|, |T(1,2,4,8,...)|, |E4| 등을 쓰는 곳입니다^^.</h1>
     <form class="ui form">
         <div class="field">
             <textarea rows="4" placeholder="|B120|\n|T4|\n..." id="modal_cop"></textarea> 

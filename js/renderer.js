@@ -19,54 +19,57 @@ console.log($);
 var ksfView = null;
 var game = null;
 
-const ksfinfo = require('electron').remote.require('./main') 
+const ksfinfo = require('electron').remote.require('./main') ;
+
+
+
+const {clipboard} = require('electron');
 
 window.onload = function(){
-    var game = new KSFView();
-    ksfView = game;
-    $('#btn1').text("aaaa");
-    $('#btn1').click(function(){
-        var data = ksfinfo.loadDataFromFile();
-        var ksf = new KSFInfo();
-        ksf.loadKSF(data);
-
+    var ksf = new KSFInfo();
+    var game = new KSFView(function() {
+        ksfView = game;
+        console.log(ksfView);
         ksf.attach(ksfView);
         ksfView.setKSF(ksf);
 
-        ksf.notifyObservers();
+        ksf.notifyObservers(); 
+    });
+
+    $('#newksf').click(function() {
+        const {ipcRenderer} = require('electron');
+        console.log(ipcRenderer);
+        ipcRenderer.send('create-new-instance'); 
+    });
+    $('#openksf').click(function(){
+        var data = ksfinfo.loadDataFromFile();
+        ksf.loadKSF(data); 
+        ksf.notifyObservers(); 
+    }); 
+    $('#saveksf').click(function() {
+        window.alert('save!!!');
+        ksfView.saveAsFile('./test.txt', 'asdasd'); 
     }); 
 
-    $('#btn2').click( () => {
-        ksfView.saveAsFile('./test.txt', 'asdasd');
-        // $('.ui.sidebar')
-            // .sidebar('toggle') ;
-
+    $('#x1').click(function() {
+        ksfView.setScale(1);
     });
-    // $('#ksf-title').keydown(function(e) {
-        // e.stopPropagation();
-    // });
-    // $('#ksf-bpm').keydown(function(e) {
-        // e.stopPropagation();
-    // });
-    // $('#ksf-starttime').keydown(function(e) {
-        // e.stopPropagation();
-    // });
-    // $('#ksf-tickcount').keydown(function(e) {
-        // e.stopPropagation();
-    // });
-    // $('.overlay.sidebar')
-        // .sidebar({
-            // overlay: true
-        // })
-        // .sidebar('toggle')
-// ;
-    // $('.ui.sidebar').sidebar('toggle');
-    // global.ksfView = game;
-}
+    $('#x2').click(function() {
+        ksfView.setScale(2);
+    });
+    $('#x4').click(function() {
+        ksfView.setScale(4);
+    });
+    $('#x6').click(function() {
+        ksfView.setScale(6);
+    });
+    $('#x8').click(function() {
+        ksfView.setScale(8);
+    });
+};
 
 $( window ).resize(function() {
     ksfView && ksfView.resize();
-    // ksfView.resize();
 });
 
 

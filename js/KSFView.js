@@ -13,7 +13,7 @@ class Arrow extends Phaser.Sprite {
     }
 }
 class KSFView {
-    constructor() {
+    constructor(callback) {
         this.arrowSize = 16;
         this.ksfinfo = null;
         this.index2Coord = {};
@@ -23,6 +23,7 @@ class KSFView {
         this.selBegin = 0;
         this.selEnd = 0;
         this.copState = false;
+        this.scale = 1;
         this.preload = () => {
             this.game.load.image('1', 'img/1.png');
             this.game.load.image('3', 'img/3.png');
@@ -61,6 +62,7 @@ class KSFView {
                         changeIndex = this.selBegin;
                     }
                     changeIndex++;
+                    changeIndex = Math.min(this.ksfinfo.steps.length - 1, changeIndex);
                     if (e.shiftKey == true) {
                         this.selEnd = changeIndex;
                     }
@@ -79,6 +81,7 @@ class KSFView {
                         changeIndex = this.selBegin;
                     }
                     changeIndex--;
+                    changeIndex = Math.max(0, changeIndex);
                     if (e.shiftKey == true) {
                         this.selEnd = changeIndex;
                     }
@@ -197,8 +200,28 @@ class KSFView {
                     console.log(e);
                 });
             }
-            else if ("zscqwevgnry".includes(e.key)) {
+            else if (e.ctrlKey == false && "zscqwevgnry".includes(e.key)) {
                 this.ksfinfo.setStep(this.selEnd, e.key);
+                this.redraw();
+            }
+            else if (e.ctrlKey == true && e.key == "c") {
+                this.copyStep(this.selBegin, this.selEnd);
+            }
+            else if (e.ctrlKey == true && e.key == "v") {
+                this.pasteStep();
+                this.redraw();
+            }
+            else if (e.key == "Insert") {
+                if (e.ctrlKey == true) {
+                    this.ksfinfo.pushBack();
+                }
+                else {
+                    this.ksfinfo.insert(this.selEnd);
+                }
+                this.redraw();
+            }
+            else if (e.key == "Delete") {
+                this.ksfinfo.deleteStep(this.selEnd);
                 this.redraw();
             }
         };
@@ -253,7 +276,11 @@ class KSFView {
                 this.cops.add(this.game.add.sprite(x, y, 'cop'));
             }
         };
-        this.game = new Phaser.Game(800, 1000, Phaser.AUTO, 'ksf-view', { preload: this.preload, create: this.create,
+        this.game = new Phaser.Game(800, 1000, Phaser.AUTO, 'ksf-view', { preload: this.preload,
+            create: () => {
+                this.create();
+                callback();
+            },
             update: this.update });
         $('#main-view').keydown(this.keyUp);
     }
@@ -286,13 +313,15 @@ class KSFView {
                 x += this.arrowSize * 11;
             }
         }
+        this.drawLine((xCount - 1) * this.arrowSize * 11, this.index2Coord[this.ksfinfo.steps.length - 1].y + this.arrowSize, 0x000000);
     }
     drawKSF() {
         var xCount = 1;
+        var computeScale = 64 * this.scale;
         var y = 0;
         var x = 0;
         var tickCount = this.ksfinfo.tickCount;
-        var yMargin = 32.0 / tickCount;
+        var yMargin = computeScale / tickCount;
         console.log(yMargin);
         let steps = this.ksfinfo.steps;
         var numberOfEachRow = Math.floor(this.game.scale.height / this.arrowSize / 4);
@@ -317,7 +346,7 @@ class KSFView {
             this.drawCOP(x, y, unitCOP);
             let newTick = this.ksfinfo.getTickCount(unitCOP);
             if (newTick != -1) {
-                yMargin = 64.0 / newTick;
+                yMargin = computeScale / newTick;
                 tickCount = newTick;
             }
             y += yMargin;
@@ -357,6 +386,45 @@ class KSFView {
     saveAsFile(filename) {
         console.log(this.ksfinfo.steps);
         this.ksfinfo.saveAsFile(filename);
+    }
+    pushBack() {
+        this.ksfinfo.pushBack();
+    }
+    insert(pos) {
+        this.ksfinfo.insert(pos);
+    }
+    deleteStep(pos) {
+        this.ksfinfo.deleteStep(pos);
+    }
+    getTextFromRange(b, e) {
+        if (b > e) {
+            let temp = e;
+            e = b;
+            b = temp;
+        }
+        let ret = "";
+        for (let i = b; i <= e; i++) {
+            ret += this.ksfinfo.steps[i].getString();
+        }
+        return ret;
+    }
+    copyStep(b, e) {
+        const { clipboard } = require('electron');
+        if (b > e) {
+            let temp = e;
+            e = b;
+            b = temp;
+        }
+        clipboard.writeText(this.getTextFromRange(b, e));
+    }
+    pasteStep() {
+        const { clipboard } = require('electron');
+        let stepsString = clipboard.readText();
+        this.ksfinfo.insertSteps(this.selEnd, this.ksfinfo.getStepsFromString(stepsString));
+    }
+    setScale(s) {
+        this.scale = s;
+        this.redraw();
     }
 }
 exports.KSFView = KSFView;

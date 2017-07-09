@@ -65,6 +65,7 @@ class StepData {
     unitCOP : Array<string>; 
     constructor(){
         this.unitCOP = [];
+        this.unitStep = "0000000000000";
     }
 
     public getString():string{
@@ -112,6 +113,7 @@ class StepData {
         return dict[unit];
     }
 
+
 }
 export class KSFInfo implements KSFData{
     public attach(observer:Observer) {
@@ -147,6 +149,12 @@ export class KSFInfo implements KSFData{
 
     constructor(name: string) { this.title = name; 
         this.steps = []; 
+        this.steps.push(new StepData());
+        this.title = "new title";
+        this.player = "double";
+        this.bpm1 = 120;
+        this.startTime = 0;
+        this.tickCount = 4;
     }
 
     public getCOP(cop:Array<string>, pattern) {
@@ -194,41 +202,8 @@ export class KSFInfo implements KSFData{
         // console.log("first steps length = ", this.steps.length);
         // expression = TEXT("^#STEP:([.\\n]+)");
         var stringStep = (data.match(/#STEP:([\S\s]+)/) || [,""])[1]; 
-        stringStep = stringStep.trim();
-        var eachSteps = stringStep.split('\n');
-        let context : number = 0;
-        for(var i=0; i<eachSteps.length; i++){
-            // console.log(eachSteps[i]);
-            var firstChar = eachSteps[i][0];
-            if(firstChar == '|'){
-                if(context != 1){
-                    var stepdata = new StepData();
-                    stepdata.unitStep = "";
-                    stepdata.unitCOP = [];
-                    this.steps.push(stepdata); 
-                }
-                var lastIndex = this.steps.length - 1;
-                // console.log("lastIndex = ", lastIndex);
-                this.steps[lastIndex].unitCOP.push(eachSteps[i]);
-                context = 1;
-            }
-            else if(firstChar == '2'){
-            }
-            else{
-                if(context != 1){
-                    var stepdata = new StepData();
-                    stepdata.unitStep = eachSteps[i];
-                    stepdata.unitCOP = [];
-
-                    this.steps.push(stepdata); 
-                }
-                else{
-                    this.steps[this.steps.length - 1].unitStep = eachSteps[i];
-                }
-                context = 2;
-            }
-        } 
-
+        stringStep = stringStep.trim(); 
+        this.steps = this.getStepsFromString(stringStep); 
     } 
     public setCOPwithIndex(i:number, cop:Array<string>) {
         this.steps[i].unitCOP = cop;
@@ -272,6 +247,66 @@ export class KSFInfo implements KSFData{
 
         this.steps[i].setStep(step);
     }
+    public pushBack() {
+        this.steps.push(new StepData()); 
+    }
+
+    public insert(pos:number) {
+        this.steps.splice(pos, 0, new StepData()); 
+    }
+    public deleteStep(pos:number) {
+        console.log(this.steps);
+        this.steps.splice(pos, 1); 
+        console.log(this.steps);
+    }
+    public getStepsFromString(steps:string) {
+        let localSteps:Array<StepData> = [];
+
+        var eachSteps = steps.split('\n');
+        let context : number = 0;
+        for(var i=0; i<eachSteps.length; i++){
+            // console.log(eachSteps[i]);
+            var firstChar = eachSteps[i][0];
+            if(firstChar == '|'){
+                if(context != 1){
+                    var stepdata = new StepData();
+                    stepdata.unitStep = "";
+                    stepdata.unitCOP = [];
+                    localSteps.push(stepdata); 
+                }
+                var lastIndex = localSteps.length - 1;
+                // console.log("lastIndex = ", lastIndex);
+                localSteps[lastIndex].unitCOP.push(eachSteps[i]);
+                context = 1;
+            }
+            else if(firstChar == '2'){
+            }
+            else{
+                if(context != 1){
+                    var stepdata = new StepData();
+                    stepdata.unitStep = eachSteps[i];
+                    stepdata.unitCOP = [];
+
+                    localSteps.push(stepdata); 
+                }
+                else{
+                    localSteps[localSteps.length - 1].unitStep = eachSteps[i];
+                }
+                context = 2;
+            }
+        } 
+        return localSteps;
+
+    }
+
+
+    public insertSteps(pos:number, steps:Array<StepData>) {
+        let insertIndex = pos;
+        for(let i=0; i<steps.length; i++) {
+            this.steps.splice(insertIndex++, 0, steps[i]); 
+        }
+    }
+
 }
 
 

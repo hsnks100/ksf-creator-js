@@ -1,7 +1,5 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts"/> 
 
-
-
 const COPEditor = require('electron').remote.require('./COPEditor') 
 const main = require('electron').remote.require('./main') ;
 
@@ -10,6 +8,7 @@ require('jquery-ui-dist/jquery-ui.js');
 
 // import COPEditor from "./COPEditor";
 // require('./COPEditor.ts');
+
 
 
 // var KSFInfo = require('./KSFInfo').KSFInfo;
@@ -50,9 +49,10 @@ export class KSFView implements Observer{
     cops:Phaser.Group;
     selections:Phaser.Group; 
     copState:boolean = false;
-    scale:number = 1;
-
-
+    scale:number = 1; 
+    isEdited:boolean = false;
+    hasPath:boolean = false;
+    filePath:string = "newksf.ksf"; 
 
     public reflectData() {
         $('#ksf-title').attr("value", this.ksfinfo.title);
@@ -263,6 +263,7 @@ export class KSFView implements Observer{
                     }
                     this.ksfinfo.setCOPwithIndex(this.selEnd, arrayT);
                     this.redraw(); 
+                    this.isEdited = true;
                     // window.alert('Approved!');
                     return false;
                 },
@@ -314,6 +315,7 @@ export class KSFView implements Observer{
             this.ksfinfo.setStep(this.selEnd, e.key);
 
             this.redraw(); 
+            this.isEdited = true;
         }
         
         else if(e.ctrlKey == true && e.key == "c") {
@@ -323,6 +325,7 @@ export class KSFView implements Observer{
         else if(e.ctrlKey == true && e.key == "v") {
             this.pasteStep();
             this.redraw();
+            this.isEdited = true;
             //this.copyStep(this.selBegin, this.selEnd); 
         }
 
@@ -333,6 +336,7 @@ export class KSFView implements Observer{
             else{
                 this.ksfinfo.insert(this.selEnd);
             }
+            this.isEdited = true;
 
             this.redraw();
         } 
@@ -340,6 +344,7 @@ export class KSFView implements Observer{
         else if(e.key == "Delete") {
             this.ksfinfo.deleteStep(this.selEnd);
             this.redraw();
+            this.isEdited = true;
         } 
     }
 
@@ -510,8 +515,30 @@ export class KSFView implements Observer{
         this.ksfinfo = ksfinfo; 
         this.selBegin = 0;
     } 
+
+    public getFileName() {
+
+        const path = require('path');
+        return path.basename(this.filePath); 
+    }
+
+    public save() {
+        if(this.hasPath == false) {
+            const main = require('electron').remote.require('./main'); 
+
+            var file = main.saveDialog(this.getFileName()); 
+            if(file != "") {
+                this.filePath = file;
+                this.saveAsFile(this.filePath);
+                this.hasPath = true;
+            }
+        }
+        else {
+            this.saveAsFile(this.filePath);
+        }
+    }
+
     public saveAsFile(filename:string) { 
-        console.log(this.ksfinfo.steps);
         this.ksfinfo.saveAsFile(filename);
     }
 

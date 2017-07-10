@@ -29,18 +29,32 @@ function createWindow() {
     ipcMain.on('create-new-instance', () => {
         createWindow();
     });
+    exports.loadDataFromFile = function () {
+        console.log("!!!???");
+        const { dialog } = require('electron');
+        var file = dialog.showOpenDialog(win, { properties: ['openFile'] });
+        console.log("fileName !!! => ", file);
+        if (typeof file == 'undefined') {
+            return null;
+        }
+        var fileName = file.length ? file[0] : '';
+        var fs = require('fs');
+        return { data: fs.readFileSync(fileName, 'utf8'), path: fileName };
+    };
+    exports.saveDialog = function (_defaultPath) {
+        const { dialog } = require('electron');
+        var file = dialog.showSaveDialog(win, { defaultPath: _defaultPath });
+        if (typeof file == "undefined") {
+            return "";
+        }
+        else {
+            return file;
+        }
+    };
 }
 app.on('ready', createWindow);
-exports.loadDataFromFile = function () {
-    const { dialog } = require('electron');
-    var file = dialog.showOpenDialog({ properties: ['openFile'] });
-    file = file.length ? file[0] : '';
-    console.log(file);
-    var fs = require('fs');
-    return fs.readFileSync(file, 'utf8');
-    return fs.readFileSync('sample.ksf', 'utf8');
-};
 exports.saveAsFile = (filename, data) => {
     var fs = require('fs');
+    console.log("parameters", filename, data);
     return fs.writeFileSync(filename, data, 'utf8');
 };

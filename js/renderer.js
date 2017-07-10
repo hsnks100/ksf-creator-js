@@ -19,10 +19,7 @@ console.log($);
 var ksfView = null;
 var game = null;
 
-const ksfinfo = require('electron').remote.require('./main') ;
-
-
-
+const ksfinfo = require('electron').remote.require('./main'); 
 const {clipboard} = require('electron');
 
 window.onload = function(){
@@ -42,13 +39,18 @@ window.onload = function(){
         ipcRenderer.send('create-new-instance'); 
     });
     $('#openksf').click(function(){
+        if(ksfView.isEdited) {
+        }
         var data = ksfinfo.loadDataFromFile();
-        ksf.loadKSF(data); 
-        ksf.notifyObservers(); 
+        if(data != null) {
+            ksf.loadKSF(data.data); 
+            ksfView.filePath = data.path;
+            ksfView.hasPath = true;
+            ksf.notifyObservers(); 
+        }
     }); 
     $('#saveksf').click(function() {
-        window.alert('save!!!');
-        ksfView.saveAsFile('./test.txt', 'asdasd'); 
+        ksfView.save();
     }); 
 
     $('#x1').click(function() {

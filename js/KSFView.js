@@ -24,6 +24,9 @@ class KSFView {
         this.selEnd = 0;
         this.copState = false;
         this.scale = 1;
+        this.isEdited = false;
+        this.hasPath = false;
+        this.filePath = "newksf.ksf";
         this.preload = () => {
             this.game.load.image('1', 'img/1.png');
             this.game.load.image('3', 'img/3.png');
@@ -187,6 +190,7 @@ class KSFView {
                         }
                         this.ksfinfo.setCOPwithIndex(this.selEnd, arrayT);
                         this.redraw();
+                        this.isEdited = true;
                         return false;
                     },
                     onHidden: function () {
@@ -203,6 +207,7 @@ class KSFView {
             else if (e.ctrlKey == false && "zscqwevgnry".includes(e.key)) {
                 this.ksfinfo.setStep(this.selEnd, e.key);
                 this.redraw();
+                this.isEdited = true;
             }
             else if (e.ctrlKey == true && e.key == "c") {
                 this.copyStep(this.selBegin, this.selEnd);
@@ -210,6 +215,7 @@ class KSFView {
             else if (e.ctrlKey == true && e.key == "v") {
                 this.pasteStep();
                 this.redraw();
+                this.isEdited = true;
             }
             else if (e.key == "Insert") {
                 if (e.ctrlKey == true) {
@@ -218,11 +224,13 @@ class KSFView {
                 else {
                     this.ksfinfo.insert(this.selEnd);
                 }
+                this.isEdited = true;
                 this.redraw();
             }
             else if (e.key == "Delete") {
                 this.ksfinfo.deleteStep(this.selEnd);
                 this.redraw();
+                this.isEdited = true;
             }
         };
         this.redraw = () => {
@@ -383,8 +391,25 @@ class KSFView {
         this.ksfinfo = ksfinfo;
         this.selBegin = 0;
     }
+    getFileName() {
+        const path = require('path');
+        return path.basename(this.filePath);
+    }
+    save() {
+        if (this.hasPath == false) {
+            const main = require('electron').remote.require('./main');
+            var file = main.saveDialog(this.getFileName());
+            if (file != "") {
+                this.filePath = file;
+                this.saveAsFile(this.filePath);
+                this.hasPath = true;
+            }
+        }
+        else {
+            this.saveAsFile(this.filePath);
+        }
+    }
     saveAsFile(filename) {
-        console.log(this.ksfinfo.steps);
         this.ksfinfo.saveAsFile(filename);
     }
     pushBack() {

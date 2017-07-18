@@ -6,8 +6,25 @@ space 시 |B| |E| 등등 가능한거 나오고 수치만 입력 할 수있게.
 
 save/open/new 에 대한 내용 작성.
 
+new - 어차피 새창으로 걍 뜨는 거니까 분기가 없음.
+open - {
+    hasPath && isEdited 저장하시겠습니까? 
+        예 누르면 저장하고 오픈창 
+        아니오 : 버리고 열기
+    hasPath && !isEditied 있을 수 없는 상황
+    !hasPath && !isEditied 버리고 오픈창
+    !hasPath && isEditied 저장하시겠습니까?
+        예 누르면 저장 위치 나오고 저장 후 오픈창
+        아니오 : 버리고 오픈창 
+}
 
+save - {
+    잘동작 하는 듯??
+}
 
+title 에 isEdited 표시 하기 
+
+롱노트 지원
 
 
 메뉴

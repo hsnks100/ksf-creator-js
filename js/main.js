@@ -51,6 +51,11 @@ function createWindow() {
             return file;
         }
     };
+    exports.showMessageBox = function (options, callback) {
+        const { dialog } = require('electron');
+        var f = dialog.showMessageBox(win, options, callback);
+        console.log(f);
+    };
 }
 app.on('ready', createWindow);
 exports.saveAsFile = (filename, data) => {

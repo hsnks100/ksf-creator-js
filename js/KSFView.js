@@ -403,10 +403,12 @@ class KSFView {
                 this.filePath = file;
                 this.saveAsFile(this.filePath);
                 this.hasPath = true;
+                this.isEdited = false;
             }
         }
         else {
             this.saveAsFile(this.filePath);
+            this.isEdited = false;
         }
     }
     saveAsFile(filename) {

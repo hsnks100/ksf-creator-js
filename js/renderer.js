@@ -19,7 +19,7 @@ console.log($);
 var ksfView = null;
 var game = null;
 
-const ksfinfo = require('electron').remote.require('./main'); 
+const main = require('electron').remote.require('./main'); 
 const {clipboard} = require('electron');
 
 window.onload = function(){
@@ -39,14 +39,50 @@ window.onload = function(){
         ipcRenderer.send('create-new-instance'); 
     });
     $('#openksf').click(function(){
-        if(ksfView.isEdited) {
+        var editedOpenFile = ksfView.hasPath && ksfView.isEdited;
+        var editedNewFile = !ksfView.hasPath && ksfView.isEdited;
+        var noEditedNewFile = !ksfView.hasPath && !ksfView.isEditied;
+
+        function openDialog() {
+            var data = main.loadDataFromFile();
+            if(data != null) {
+                ksf.loadKSF(data.data); 
+                ksfView.filePath = data.path;
+                ksfView.hasPath = true;
+                ksfView.isEdited = false;
+                ksfView.selBegin = ksfView.selEnd = 0;
+                ksf.notifyObservers(); 
+            }
         }
-        var data = ksfinfo.loadDataFromFile();
-        if(data != null) {
-            ksf.loadKSF(data.data); 
-            ksfView.filePath = data.path;
-            ksfView.hasPath = true;
-            ksf.notifyObservers(); 
+
+        if(editedOpenFile) {
+            main.showMessageBox({"type":"question", "buttons":["save", "no", "cancel"],
+                "message":"Do you want to save ksf?"},
+                function(response, checkboxChecked){
+                    if(response == 0) {
+                        ksfView.save();
+                        openDialog();
+                    }
+                    else if(response == 1) {
+                        openDialog();
+                    } 
+                }) ; 
+        }
+        else if(editedNewFile) {
+            main.showMessageBox({"type":"question", "buttons":["save", "no", "cancel"],
+                "message":"Do you want to save ksf?"},
+                function(response, checkboxChecked){
+                    if(response == 0) {
+                        ksfView.save();
+                        openDialog();
+                    }
+                    else if(response == 1) {
+                        openDialog();
+                    } 
+                }) ; 
+        }
+        else{
+            openDialog();
         }
     }); 
     $('#saveksf').click(function() {

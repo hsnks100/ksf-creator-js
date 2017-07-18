@@ -33,7 +33,7 @@ class Arrow extends Phaser.Sprite {
 } 
 
 
-export class KSFView implements Observer{
+export class KSFView implements Observer {
     game:Phaser.Game;
     arrowSize:number = 16;
     ksfinfo:KSFInfo = null;
@@ -531,10 +531,12 @@ export class KSFView implements Observer{
                 this.filePath = file;
                 this.saveAsFile(this.filePath);
                 this.hasPath = true;
+                this.isEdited = false;
             }
         }
         else {
             this.saveAsFile(this.filePath);
+            this.isEdited = false;
         }
     }
 

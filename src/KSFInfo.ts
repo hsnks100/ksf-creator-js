@@ -115,7 +115,7 @@ class StepData {
 
 
 }
-export class KSFInfo implements KSFData{
+export class KSFInfo { // implements KSFData{
     public attach(observer:Observer) {
         this.observers.push(observer);
     }

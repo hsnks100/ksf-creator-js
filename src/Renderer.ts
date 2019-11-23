@@ -1,11 +1,10 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
-//
+// var KSFView = require('./KSFView').KSFView;
+// import  KSFView from './KSFView';
+// import  KSFInfo from './KSFInfo';
+// var KSFInfo = require('./KSFInfo').KSFInfo;
 
-
-var KSFView = require('./KSFView').KSFView;
-var KSFInfo = require('./KSFInfo').KSFInfo;
+import { KSFInfo }from './KSFInfo.ts';
+import { KSFView }from './KSFView.ts';
 
 
 var $, jQuery;
@@ -23,7 +22,7 @@ const main = require('electron').remote.require('./main');
 const {clipboard} = require('electron');
 
 window.onload = function(){
-    var ksf = new KSFInfo();
+    var ksf = new KSFInfo("noname");
     var game = new KSFView(function() {
         ksfView = game;
         console.log(ksfView);
@@ -109,8 +108,4 @@ window.onload = function(){
 $( window ).resize(function() {
     ksfView && ksfView.resize();
 });
-
-
-
-
 

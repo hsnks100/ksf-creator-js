@@ -1,9 +1,6 @@
-/// <reference path="KSFInfo.ts"/>
+import {app, BrowserWindow, ipcMain, globalShortcut} from 'electron';
 
-
-
-const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron')
-
+// import fs = require('fs'); 
 let path = require('path')
 let url = require('url') 
 
@@ -14,13 +11,6 @@ let mainWindow;
 
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
-})
 
 function createWindow() {
     // On OS X it's common to re-create a window in the app when the
@@ -40,11 +30,16 @@ function createWindow() {
         click: () => { console.log('time to print stuff') }
     }))
 
-    var win = new BrowserWindow();
+    var win = new BrowserWindow( {
+        webPreferences: {
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'preload.js')
+        },
+    });
     win.loadURL(url.format({
-        pathname: path.join(__dirname + "/../", 'index.html'),
+        pathname: path.join(__dirname + "/", 'index.html'),
         protocol: 'file:',
-        slashes: true
+        slashes: false
     }));
     win.maximize(); 
     win.webContents.openDevTools()
@@ -66,10 +61,8 @@ function createWindow() {
         if(typeof file == 'undefined') {
             return null;
         }
-        var fileName = file.length ? file[0] : ''; 
-        var fs = require('fs'); 
-        return {data:fs.readFileSync(fileName, 'utf8'), path:fileName};
-        //return fs.readFileSync('sample.ksf', 'utf8'); 
+        // var fileName = file.length ? file[0] : ''; 
+        // return {data:fs.readFileSync(fileName, 'utf8'), path:fileName};
     }
 
     exports.saveDialog = function(_defaultPath) {
@@ -85,10 +78,9 @@ function createWindow() {
     }
 
     exports.showMessageBox = function(options, callback) {
-        const {dialog} = require('electron');
-
-        var f = dialog.showMessageBox(win, options, callback);
-        console.log(f); 
+        // const {dialog} = require('electron'); 
+        // var f = dialog.showMessageBox(win, options, callback);
+        // console.log(f); 
     } 
 }
 
@@ -103,13 +95,20 @@ function createWindow() {
 app.on('ready', createWindow)
 
 exports.saveAsFile = (filename:String, data:String) => {
-    var fs = require('fs'); 
-    console.log("parameters", filename, data);
-    return fs.writeFileSync(filename, data, 'utf8'); 
+    // var fs = require('fs'); 
+    // console.log("parameters", filename, data);
+    // return fs.writeFileSync(filename, data, 'utf8'); 
 }
 
 //exports.createWindow = createWindow;
 
 
+app.on('window-all-closed', function () {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
+})
 
 

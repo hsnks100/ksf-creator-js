@@ -1,18 +1,19 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts"/> 
 
-const COPEditor = require('electron').remote.require('./COPEditor') 
+// const COPEditor = require('electron').remote.require('./COPEditor') 
 const main = require('electron').remote.require('./main') ;
 
-declare var $; 
-require('jquery-ui-dist/jquery-ui.js'); 
+const $ = require('jquery');
+const jQuery = require('jquery');
+// require('jquery-ui-dist/jquery-ui.js'); 
 
-// import COPEditor from "./COPEditor";
-// require('./COPEditor.ts');
-
-
-
-// var KSFInfo = require('./KSFInfo').KSFInfo;
 import { KSFInfo } from "./KSFInfo";
+// import * as Phaser from 'phaser';
+// import Phaser = require('phaser'); // works!
+// import Phaser = require('phaser'); // works!
+// import * as Phaser from 'phaser';
+
+
 
 export interface Observer { 
      reflectData(); 

@@ -3,12 +3,28 @@
 // const COPEditor = require('electron').remote.require('./COPEditor') 
 const main = require('electron').remote.require('./main') ;
 
-const $ = require('jquery');
-const jQuery = require('jquery');
-// require('jquery-ui-dist/jquery-ui.js'); 
+// const $ = require('jquery');
+// const jQuery = require('jquery');
+// require('../semantic/dist/semantic.js');
+// const $ = require('jquery-ui-dist/jquery-ui.js'); 
+var $ = require('jquery')
+var jQuery = $;
+require('webpack-jquery-ui');
+require('webpack-jquery-ui/css');
+require('jquery-modal');
+
+// import $ from 'jquery-ui';
 
 import { KSFInfo } from "./KSFInfo";
-// import * as Phaser from 'phaser';
+const Phaser = require('phaser');
+// import {Phaser} from 'phaser';
+// var Phaser = require('../node_modules/phaser/build/phaser.js');
+// var Phaser = require('../node_modules/phaser/build/phaser.js');
+// var P2 = require('../node_modules/phaser/build/p2.js');
+// var PIXI = require('../node_modules/phaser/build/pixi.js');
+// var Phaser = require('phaser');
+// var pixi = require('phaser');
+// var p2 = require('phaser');
 // import Phaser = require('phaser'); // works!
 // import Phaser = require('phaser'); // works!
 // import * as Phaser from 'phaser';
@@ -21,11 +37,14 @@ export interface Observer {
 
 class Arrow extends Phaser.Sprite {
     game:Phaser.Game;
-    // position:MyPoint;
+    position:Phaser.Point;
+    anchor:Phaser.Point;
     theta:number;
     public constructor(game:Phaser.Game, arrow:string) { 
         super(game, 0, 0, arrow);
         this.game = game;
+        // var gg : Phaser.Sprite = new Phaser.Sprite(game, 0, 0, '1');
+        // gg.position.x = 0;
         this.anchor.y = 0;
     }
 

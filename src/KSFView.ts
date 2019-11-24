@@ -3,20 +3,17 @@
 // const COPEditor = require('electron').remote.require('./COPEditor') 
 const main = require('electron').remote.require('./main') ;
 
-// const $ = require('jquery');
-// const jQuery = require('jquery');
-// require('../semantic/dist/semantic.js');
-// const $ = require('jquery-ui-dist/jquery-ui.js'); 
-var $ = require('jquery')
-var jQuery = $;
-require('webpack-jquery-ui');
-require('webpack-jquery-ui/css');
+const $ = require('jquery');
+require('jquery-ui');
 require('jquery-modal');
 
 // import $ from 'jquery-ui';
 
 import { KSFInfo } from "./KSFInfo";
-const Phaser = require('phaser');
+
+const Phaser = require('../lib/phaser.min.js');
+
+// const Phaser = require('phaser');
 // import {Phaser} from 'phaser';
 // var Phaser = require('../node_modules/phaser/build/phaser.js');
 // var Phaser = require('../node_modules/phaser/build/phaser.js');
@@ -103,13 +100,13 @@ export class KSFView implements Observer {
 
     }
     public preload = () => {
-        this.game.load.image('1', 'img/1.png'); 
-        this.game.load.image('3', 'img/3.png'); 
-        this.game.load.image('5', 'img/5.png'); 
-        this.game.load.image('7', 'img/7.png'); 
-        this.game.load.image('9', 'img/9.png'); 
-        this.game.load.image('cop', 'img/cop.png'); 
-        this.game.load.image('selcop', 'img/cop2.png'); 
+        this.game.load.image('1', 'dist/1.png'); 
+        this.game.load.image('3', 'dist/3.png'); 
+        this.game.load.image('5', 'dist/5.png'); 
+        this.game.load.image('7', 'dist/7.png'); 
+        this.game.load.image('9', 'dist/9.png'); 
+        this.game.load.image('cop', 'dist/cop.png'); 
+        this.game.load.image('selcop', 'dist/cop2.png'); 
     } 
     public create = () => {
         this.game.stage.backgroundColor = '#FFFFFF';

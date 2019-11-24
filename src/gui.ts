@@ -1,26 +1,29 @@
 import { KSFView }from './KSFView';
-const $ = require('jquery');
-const jQuery = require('jquery');
-// require('./KSFView.ts');
 require('./KSFInfo.ts');
 // import {*} from './renderer';
 require('./Renderer.ts');
-
-
-// All of the Node.js APIs are available in the preload process.
-// It has the same sandbox as a Chrome extension.
-window.addEventListener('DOMContentLoaded', () => {
-  const replaceText = (selector, text) => {
-    const element = document.getElementById(selector)
-    if (element) element.innerText = text
-  } 
-  
-  for (const type of ['chrome', 'node', 'electron']) {
-    replaceText(`${type}-version`, process.versions[type])
-  }
-});
-
-import * as Phaser from 'phaser';
+require('../semantic/dist/semantic.js');
+// import '../semantic/dist/semantic.min.css';
+import '../semantic/dist/semantic.css';
+import './img/1.png';
+import './img/3.png';
+import './img/5.png';
+import './img/7.png';
+import './img/9.png';
+import './img/cop.png';
+import './img/cop2.png';
+import './img/bullet.png';
+// import '../img/1.png';
+// import '../img/1.png';
+// import '../img/1.png';
+// const $ = require('jquery');
+// const jQuery = require('jquery');
+// require('./KSFView.ts');
+// require('../src/phaser.min.js');
+// import '../src/phaser.min.js';
+// import * as Phaser from 'phaser';
 // import Phaser = require('phaser'); // works!
 
-import { jQuery } from 'jquery';
+// import { jQuery } from 'jquery';
+
+

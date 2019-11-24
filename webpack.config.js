@@ -1,6 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
 module.exports = [
@@ -24,15 +24,15 @@ module.exports = [
             ]
         },
         target: "electron-main"
-        // node: {
-        //     fs: 'empty'
-        // }
     },
     {
         target: 'electron-renderer',
         entry: { 
             gui: './src/gui.ts'
 
+        },
+        output: {
+            publicPath: 'dist/',
         },
         mode: 'development',
         module: {
@@ -50,20 +50,27 @@ module.exports = [
                     loader:"file-loader",
                     options:{
                         name:'[name].[ext]',
-                        outputPath:'assets/images/'
+                        // outputPath:'assets/images/'
                         //the images will be emited to dist/assets/images/ folder
+                    }
+                },
+                {
+                    test: /\.(eot|svg|ttf|woff|woff2)$/i,
+                    loader:"file-loader",
+                    options:{
+                        name:'[name].[ext]',
                     }
                 }
             ]
         },
         plugins: [
-            /* Use the ProvidePlugin constructor to inject jquery implicit globals */
-            new webpack.ProvidePlugin({
-                                      $: "jquery",
-                                      jQuery: "jquery",
-                                      "window.jQuery": "jquery'",
-                                      "window.$": "jquery"
-            })
+            new webpack.ProvidePlugin(
+                {
+                    $: 'jquery',
+                    jQuery: 'jquery',
+                    'window.jQuery': 'jquery',
+                }
+                )
         ]
         // externals: {
         //     phaser: 'Phaser',

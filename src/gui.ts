@@ -1,3 +1,7 @@
+import 'p2';
+import 'pixi1';
+import 'phaser';
+
 import { KSFView }from './KSFView';
 require('./KSFInfo.ts');
 // import {*} from './renderer';
@@ -13,6 +17,8 @@ import './img/9.png';
 import './img/cop.png';
 import './img/cop2.png';
 import './img/bullet.png';
+
+import '../css/main.css';
 // import '../img/1.png';
 // import '../img/1.png';
 // import '../img/1.png';

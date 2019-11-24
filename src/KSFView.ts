@@ -1,17 +1,12 @@
-/// <reference path="../node_modules/phaser/typescript/phaser.d.ts"/> 
-
-// const COPEditor = require('electron').remote.require('./COPEditor') 
 const main = require('electron').remote.require('./main') ;
-
 const $ = require('jquery');
-require('jquery-ui');
 require('jquery-modal');
 
 // import $ from 'jquery-ui';
 
 import { KSFInfo } from "./KSFInfo";
 
-const Phaser = require('../lib/phaser.min.js');
+// const Phaser = require('../lib/phaser.min.js');
 
 // const Phaser = require('phaser');
 // import {Phaser} from 'phaser';
@@ -100,13 +95,13 @@ export class KSFView implements Observer {
 
     }
     public preload = () => {
-        this.game.load.image('1', 'dist/1.png'); 
-        this.game.load.image('3', 'dist/3.png'); 
-        this.game.load.image('5', 'dist/5.png'); 
-        this.game.load.image('7', 'dist/7.png'); 
-        this.game.load.image('9', 'dist/9.png'); 
-        this.game.load.image('cop', 'dist/cop.png'); 
-        this.game.load.image('selcop', 'dist/cop2.png'); 
+        this.game.load.image('1', '1.png'); 
+        this.game.load.image('3', '3.png'); 
+        this.game.load.image('5', '5.png'); 
+        this.game.load.image('7', '7.png'); 
+        this.game.load.image('9', '9.png'); 
+        this.game.load.image('cop', 'cop.png'); 
+        this.game.load.image('selcop', 'cop2.png'); 
     } 
     public create = () => {
         this.game.stage.backgroundColor = '#FFFFFF';
@@ -281,7 +276,6 @@ export class KSFView implements Observer {
                     this.ksfinfo.setCOPwithIndex(this.selEnd, arrayT);
                     this.redraw(); 
                     this.isEdited = true;
-                    // window.alert('Approved!');
                     return false;
                 },
                 onHidden : function() {

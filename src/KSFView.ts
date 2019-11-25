@@ -1,3 +1,4 @@
+/// <reference path="../node_modules/phaser/typescript/phaser.d.ts"/>
 const main = require('electron').remote.require('./main') ;
 const $ = require('jquery');
 require('jquery-modal');
@@ -8,7 +9,7 @@ import { KSFInfo } from "./KSFInfo";
 
 // const Phaser = require('../lib/phaser.min.js');
 
-// const Phaser = require('phaser');
+const Phaser = require('phaser');
 // import {Phaser} from 'phaser';
 // var Phaser = require('../node_modules/phaser/build/phaser.js');
 // var Phaser = require('../node_modules/phaser/build/phaser.js');

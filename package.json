@@ -6,6 +6,7 @@
   "scripts": {
     "start": "electron .",
     "reload": "live-reload app --port 35729",
+    "ksoo": "webpack",
     "build": "electron-packager . ElectronPJ --overwrite"
   },
   "repository": "https://github.com/electron/electron-quick-start",
@@ -39,6 +40,7 @@
     "typings": "^2.1.1",
     "url-loader": "^2.3.0",
     "webpack": "^4.41.2",
+    "electron": "^7.1.2",
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
@@ -48,7 +50,6 @@
     "fs": "0.0.1-security",
     "gulp": "^3.9.1",
     "jquery": "^3.2.1",
-    "electron": "^7.1.2",
     "jquery-modal": "^0.9.2",
     "jquery-ui": "^1.12.1",
     "jquery-ui-dist": "^1.12.1",

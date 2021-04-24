@@ -2,105 +2,38 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+        <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+        <title>Hello World123213!</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src *">
 
 
-        <title>Hello World!</title> 
-</head>
-<body id="main-view">
-    <div>
-        <div class="ui menu">
-            <div class="ui container">
-                <div class="ui simple dropdown item">
-                    File
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item" id="newksf"><i class="file icon"></i>New KSF</div>
-                        <div class="item" id="openksf"><i class="edit icon"></i>Open KSF</div>
-                        <div class="item" id="saveksf"><i class="save icon"></i>Save KSF</div>
-                    </div>
-                </div>
-                <div class="ui simple dropdown item">
-                    Edit
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item" id=""><i class="minus icon"></i>insert</div>
-                        <div class="item" id=""><i class="minus icon"></i>push back</div>
-                        <div class="item" id=""><i class="remove circle icon"></i>delete step</div>
-                        <div class="item" id=""><i class="toggle up icon"></i>rotate step</div>
-                        <div class="item" id=""><i class="sort icon"></i>set margin</div>
-                        <div class="item" id=""><i class="code icon"></i>edit bpm</div>
-                        <div class="item" id=""><i class="cut icon"></i>cut step</div>
-                        <div class="item" id=""><i class="copy icon"></i>copy step</div>
-                        <div class="item" id=""><i class="paste icon"></i>paste step</div>
-                    </div>
-                </div>
-                <div class="ui simple dropdown item">
-                    View
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item" id=""><i class="newspaper icon"></i>Single</div>
-                        <div class="item" id=""><i class="newspaper icon"></i>Double</div>
-                        <div class="item" id="x1"><i class="zoom icon"></i>X1</div>
-                        <div class="item" id="x2"><i class="zoom icon"></i>X2</div>
-                        <div class="item" id="x4"><i class="zoom icon"></i>X4</div>
-                        <div class="item" id="x6"><i class="zoom icon"></i>X6</div>
-                        <div class="item" id="x8"><i class="zoom icon"></i>X8</div>
-                    </div>
-                </div>
-                <div class="ui simple dropdown item">
-                    Player
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item" id=""><i class="play icon"></i>Resume</div>
-                        <div class="item" id=""><i class="play icon"></i>Play</div>
-                        <div class="item" id=""><i class="stop icon"></i>STOP</div>
-                        <div class="item" id=""><i class="save icon"></i>KSF to PIC</div>
-                    </div>
-                </div>
+
+        <!-- <link rel="stylesheet" href="bootstrap.min.css"> -->
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="hex.css">
+        <link rel="stylesheet" type="text/css" href="step.css"> 
+    </head>
+    <body>
+        <div id="root" tabindex="0">
+            <div class="toolbar__3imRV">
+                <button type="button" id="new_file" class="toolbar-button__2myq8" accesskey="n">
+                    새 파일123</button>
             </div>
-        </div>
-
-        <div class="ui grid stackable">
-            <div class="row">
-                <div class="ui menu  stackable ">
-                    <div class="ui input item ksfheader">
-                        <input type="text" placeholder="TITLE" id="ksf-title">
-                    </div>
-                    <div class="ui input item ksfheader">
-                        <input type="text" placeholder="BPM" id="ksf-bpm">
-                    </div>
-                    <div class="ui input item ksfheader">
-                        <input type="text" placeholder="STARTTIME" id="ksf-starttime">
-                    </div>
-                    <div class="ui input item ksfheader">
-                        <input type="text" placeholder="TICK" id="ksf-tickcount">
-                    </div>
-                </div>
+            <div class="statusbar__6IUj5">status bar 
+                We are using Node.js <span id="node-version"></span>,
+                Chromium <span id="chrome-version"></span>,
+                and Electron <span id="electron-version"></span>.
             </div>
-            <div class="row" tabIndex="-1">
-                <div class="ksf-view  menu ui" id="ksf-view"></div> 
+            <div class="col-lg-3"> 
+                <ul id="ul_files"></ul>
             </div>
+            <div id="center" class="col-lg-7"> 
+            </div> 
         </div>
-
-    </div>
-
-
-</body>
-<div id="dialog" title="Basic dialog" class="ui modal">
-    <h1>변속정보 |Bxxx|, |T(1,2,4,8,...)|, |E4| 등을 쓰는 곳입니다^^.</h1>
-    <form class="ui form">
-        <div class="field">
-            <textarea rows="4" placeholder="|B120|\n|T4|\n..." id="modal_cop"></textarea> 
-        </div>
-    </form>
-    <div class="actions">
-        <div class="ui approve button" id="modal_done">Done</div>
-    </div>
-</div>
-
-<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
-
-<!-- <script src="lib/phaser.min.js"></script>  -->
-<!-- <script src="dist/gui.js"></script>  -->
-
+        <!-- You can also require other files to run in this process -->
+        <script src="./renderer.js"></script>
+    </body>
 </html>

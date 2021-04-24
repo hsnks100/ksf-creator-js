@@ -1,0 +1,29 @@
+* { user-select: none; }
+
+.step_row {
+    line-height: 16px;
+}
+.step_row {
+    width: 300px;
+}
+
+.ds-selected {
+  outline: 1px solid black;
+  outline-offset: 2px;
+  color: black;
+  font-weight: bold;
+}
+
+.step_row:focus {
+    background-color:rgba(255, 0, 0, 0.3);
+}
+
+.step_row:hover{
+    background-color:#FF0000;
+}
+
+/* div :focus { */
+/*     background: yellow; */
+/*     color: blue; */
+/*     background-color: blue; */
+/* } */

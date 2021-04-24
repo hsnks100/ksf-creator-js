@@ -1,0 +1,38 @@
+.hex {
+    font-family: monospace;
+    font-size: 10pt;
+    width: 680px;
+}
+.hexdump {
+    float: left;
+    line-height: 20px;
+    width: 400px;
+}
+
+.hexascii {
+    line-height: 20px;
+}
+.hexoffset {
+    color: blue;
+    float: left;
+    line-height: 20px;
+    padding-right: 10px;
+    text-align: right;
+    width: 100px;
+}
+
+.hexscale {
+    color: blue;
+    line-height: 20px;
+    padding-left: 100px;
+}
+
+.hexscroll {
+    float: right;
+    overflow-y: scroll;
+    width: 20px;
+}
+.hexscroll div {
+    height: 960px; /* scroll size */
+}
+

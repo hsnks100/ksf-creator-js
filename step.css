@@ -1,10 +1,37 @@
 * { user-select: none; }
 
-.step_row {
-    line-height: 16px;
+.selection-area {
+  outline: 1px solid black;
+  outline-offset: -2px;
+  color: black;
+  font-weight: bold;
+  background-color:rgba(255, 0, 0, 0.3);
+}
+
+#center {
+    height: 480px;
+    display: flex; 
+    flex-direction: column;
+    flex-wrap: wrap;
+    /* display: inline-block; */
 }
 .step_row {
-    width: 300px;
+    line-height: 32px; 
+    /* float: none; */
+}
+
+.step_row_end {
+    /* display: inline; */
+    /* float: left; */
+}
+
+.step_row > img {
+    user-drag: none; 
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 .ds-selected {
@@ -15,11 +42,11 @@
 }
 
 .step_row:focus {
-    background-color:rgba(255, 0, 0, 0.3);
+    /* background-color:rgba(255, 0, 0, 0.3); */
 }
 
 .step_row:hover{
-    background-color:#FF0000;
+    /* background-color:#FF0000; */
 }
 
 /* div :focus { */
